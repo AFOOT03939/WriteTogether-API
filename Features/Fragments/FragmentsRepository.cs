@@ -88,7 +88,7 @@ namespace WriteTogether.Features.Fragments
             var parameters = new
             {
                 fragment.StoryId,
-                fragment.AuthorId,
+                fragment.UserId,
                 fragment.Content,
                 fragment.ImageUrl,
                 fragment.OrderIndex,

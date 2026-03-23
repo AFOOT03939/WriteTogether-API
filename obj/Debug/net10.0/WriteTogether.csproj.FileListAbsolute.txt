@@ -69,3 +69,4 @@ E:\Users\victo\source\repos\WriteTogether\WriteTogether\obj\Debug\net10.0\refint
 E:\Users\victo\source\repos\WriteTogether\WriteTogether\obj\Debug\net10.0\WriteTogether.pdb
 E:\Users\victo\source\repos\WriteTogether\WriteTogether\obj\Debug\net10.0\WriteTogether.genruntimeconfig.cache
 E:\Users\victo\source\repos\WriteTogether\WriteTogether\obj\Debug\net10.0\ref\WriteTogether.dll
+E:\Users\victo\source\repos\WriteTogether\WriteTogether\obj\Debug\net10.0\WriteTogether.sourcelink.json

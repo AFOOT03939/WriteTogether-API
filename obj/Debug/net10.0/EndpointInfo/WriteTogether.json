@@ -352,7 +352,7 @@
       "FragmentsModel": {
         "type": "object",
         "properties": {
-          "fragmentsId": {
+          "fragmentId": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
               "integer",
@@ -369,7 +369,7 @@
             ],
             "format": "int32"
           },
-          "authorId": {
+          "userId": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
               "null",
