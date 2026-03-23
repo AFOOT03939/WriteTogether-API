@@ -1,0 +1,6 @@
+@WriteTogether_HostAddress = http://localhost:5063
+
+GET {{WriteTogether_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
