@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.Win32;
 using WriteTogether.Dapper;
 using WriteTogether.Features.Stories;
 namespace WriteTogether.Features.Tags
@@ -31,6 +32,28 @@ namespace WriteTogether.Features.Tags
             });
 
             return result;
+        }
+
+        public async Task<int> CreateTags(string name)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                INSERT INTO tags (name, created_at, created_by)
+                OUTPUT INSERTED.id
+                VALUES (@Name, @CreatedAt,@CreatedBy);
+            ";
+
+            var parameters = new
+            {
+                Name = name,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "system"
+            };
+
+            var tagId = await connection.ExecuteScalarAsync<int>(sql, parameters);
+
+            return tagId;
         }
     }
 }

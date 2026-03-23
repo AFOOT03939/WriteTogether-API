@@ -16,5 +16,12 @@ namespace WriteTogether.Features.Tags
 
             return result;
         }
+
+        public async Task<int> CreateTags(string name)
+        {
+            var result = await _repo.CreateTags(name);
+
+            return result;
+        }
     }
 }

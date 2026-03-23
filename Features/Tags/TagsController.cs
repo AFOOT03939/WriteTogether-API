@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Win32;
 using WriteTogether.Features.Categories;
 using WriteTogether.Features.Stories;
 
@@ -30,6 +31,29 @@ namespace WriteTogether.Features.Tags
             }
 
             return Ok(tags);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTags(string name)
+        {
+            int tags;
+
+            if (name == null)
+            {
+                return BadRequest("Invalid Tag");
+            }
+
+            try
+            {
+                tags = await _tagService.CreateTags(name);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok($"Tags succesfully added: id={tags}");
         }
     }
 }
