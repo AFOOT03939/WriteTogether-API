@@ -200,6 +200,43 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WriteTogether.Features.StoriesAll.StoriesAllController",
+    "Method": "GetFullStoryByStory",
+    "RelativePath": "api/storiesAll/{storyId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.StoriesAll.StoriesAllController",
+    "Method": "CreateFullStoryByStory",
+    "RelativePath": "api/storiesAll/{storyId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "story",
+        "Type": "WriteTogether.Features.StoriesAll.StoriesAllModelDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WriteTogether.Features.Tags.TagsController",
     "Method": "CreateTags",
     "RelativePath": "api/tags",

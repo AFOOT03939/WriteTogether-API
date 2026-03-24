@@ -7,6 +7,7 @@ using WriteTogether.Features.Profile;
 using WriteTogether.Features.Ratings;
 using WriteTogether.Features.Fragments;
 using WriteTogether.Features.Stories;
+using WriteTogether.Features.StoriesAll;
 using WriteTogether.Features.Tags;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +41,9 @@ builder.Services.AddScoped<StoriesRepository>();
 
 builder.Services.AddScoped<TagsService>();
 builder.Services.AddScoped<TagsRepository>();
+
+builder.Services.AddScoped<StoriesAllService>();
+builder.Services.AddScoped<StoriesAllRepository>();
 
 
 builder.Services.AddSingleton<DbConnection>();   
