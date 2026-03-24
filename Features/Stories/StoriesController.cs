@@ -73,6 +73,27 @@ namespace WriteTogether.Features.Stories
                 return BadRequest(ex.Message);
             }
         }
-    
+
+        [HttpDelete("{storyId}/tags/{tagId}")]
+        public async Task<IActionResult> RemoveTagFromStory(int storyId, int tagId)
+        {
+            if (storyId <= 0 || tagId <= 0)
+                return BadRequest("Invalid data");
+
+            try
+            {
+                var success = await _stService.RemoveTagFromStory(storyId, tagId);
+
+                if (!success)
+                    return NotFound();
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error removing tag");
+            }
+        }
+
     }
 }

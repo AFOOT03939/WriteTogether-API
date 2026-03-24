@@ -73,5 +73,23 @@ namespace WriteTogether.Features.Stories
             return result;
         }
 
+        public async Task<int> DeleteTagFromStory(int storyId, int tagId)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                DELETE FROM story_tags
+                WHERE story_id = @StoryId AND tag_id = @TagId
+            ";
+
+            var result = await connection.ExecuteAsync(sql, new
+            {
+                StoryId = storyId,
+                TagId = tagId
+            });
+
+            return result;
+        }
+
     }
 }

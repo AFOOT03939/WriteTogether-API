@@ -50,5 +50,12 @@ namespace WriteTogether.Features.Stories
 
             return stories;
         }
+
+        public async Task<bool> RemoveTagFromStory(int storyId, int tagId)
+        {
+            var result = await _repo.DeleteTagFromStory(storyId, tagId);
+
+            return result > 0;
+        }
     }
 }
