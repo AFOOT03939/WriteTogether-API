@@ -216,6 +216,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WriteTogether.Features.Stories.StoriesController",
+    "Method": "DeleteStory",
+    "RelativePath": "api/stories/{storyId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WriteTogether.Features.StoriesAll.StoriesAllController",
     "Method": "GetFullStoryByStory",
     "RelativePath": "api/storiesAll/{storyId}",

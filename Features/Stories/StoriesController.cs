@@ -53,5 +53,26 @@ namespace WriteTogether.Features.Stories
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete("{storyId}")]
+        public async Task<IActionResult> DeleteStory(int storyId)
+        {
+            if (storyId <= 0)
+                return BadRequest("Invalid story");
+
+            int deletedStory;
+
+            try
+            {
+                deletedStory = await _stService.DeleteStory(storyId);
+
+                return Ok(deletedStory);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    
     }
 }

@@ -43,5 +43,12 @@ namespace WriteTogether.Features.Stories
 
             return success;
         }
+
+        public async Task<int> DeleteStory(int storyId)
+        {
+            var stories = await _repo.DeleteStory(storyId);
+
+            return stories;
+        }
     }
 }

@@ -56,5 +56,22 @@ namespace WriteTogether.Features.Stories
 
         }
 
+        public async Task<int> DeleteStory(int storyId)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                DELETE FROM stories
+                WHERE id = @StoryId
+            ";
+
+            var result = await connection.ExecuteAsync(sql, new
+            {
+                StoryId = storyId
+            });
+
+            return result;
+        }
+
     }
 }
