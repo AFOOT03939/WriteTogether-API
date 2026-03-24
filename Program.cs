@@ -9,6 +9,7 @@ using WriteTogether.Features.Fragments;
 using WriteTogether.Features.Stories;
 using WriteTogether.Features.StoriesAll;
 using WriteTogether.Features.Tags;
+using WriteTogether.Features.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,9 @@ builder.Services.AddScoped<TagsRepository>();
 builder.Services.AddScoped<StoriesAllService>();
 builder.Services.AddScoped<StoriesAllRepository>();
 
+builder.Services.AddScoped<UsersService>();
+builder.Services.AddScoped<UsersRepository>();
+
 
 builder.Services.AddSingleton<DbConnection>();   
 
@@ -57,6 +61,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseAuthorization();
 
