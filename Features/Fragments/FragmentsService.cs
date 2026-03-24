@@ -33,5 +33,15 @@ namespace WriteTogether.Features.Fragments
 
             return result;
         }
+
+        public async Task<int> DeleteFragments(int fragmentId)
+        {
+            var result = await _repo.DeleteFragments(fragmentId);
+
+            if (result <= 0)
+                return 0;
+
+            return result;
+        }
     }
 }

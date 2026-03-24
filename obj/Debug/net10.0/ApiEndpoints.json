@@ -59,6 +59,22 @@
   },
   {
     "ContainingType": "WriteTogether.Features.Fragments.FragmentsController",
+    "Method": "DeleteFragments",
+    "RelativePath": "api/fragments/{fragmentId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fragmentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Fragments.FragmentsController",
     "Method": "GetFragmentsByStory",
     "RelativePath": "api/fragments/stories/{storyId}",
     "HttpMethod": "GET",

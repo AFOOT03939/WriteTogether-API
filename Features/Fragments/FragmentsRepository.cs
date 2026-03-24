@@ -101,5 +101,22 @@ namespace WriteTogether.Features.Fragments
             return fragmentId;
         }
 
+        public async Task<int> DeleteFragments(int fragmentId)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                    DELETE FROM fragments
+                    WHERE id = @FragmentId
+                ";
+
+            var result = await connection.ExecuteScalarAsync<int>(sql, new
+            {
+                FragmentId = fragmentId
+            });
+
+            return result;
+        }
+
     }
 }

@@ -73,5 +73,26 @@ namespace WriteTogether.Features.Fragments
 
             return Ok(fragmentId);
         }
+
+        [HttpDelete("{fragmentId}")]
+        public async Task<IActionResult> DeleteFragments(int fragmentId)
+        {
+
+            if (fragmentId <= 0)
+                return BadRequest("Invalid fragment");
+
+            int rowFragment;
+
+            try
+            {
+                rowFragment = await _fragService.DeleteFragments(fragmentId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(fragmentId);
+        }
     }
 }
