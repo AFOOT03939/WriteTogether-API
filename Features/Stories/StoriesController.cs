@@ -95,5 +95,66 @@ namespace WriteTogether.Features.Stories
             }
         }
 
+        [HttpPost("{storyId}/image")]
+        public async Task<IActionResult> UploadStoryImage(int storyId, IFormFile file)
+        {
+            if (storyId <= 0)
+                return BadRequest("Invalid story");
+
+            if (file == null || file.Length == 0)
+                return BadRequest("Invalid file");
+
+            // 🔹 Obtener story actual
+            var story = await _stService.GetStoryById(storyId);
+
+            if (story == null)
+                return NotFound();
+
+            // 🔥 BORRAR imagen anterior
+            if (!string.IsNullOrEmpty(story.ImageUrl))
+            {
+                var oldPath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    story.ImageUrl.TrimStart('/')
+                );
+
+                if (System.IO.File.Exists(oldPath))
+                {
+                    System.IO.File.Delete(oldPath);
+                }
+            }
+
+            // 🔹 Validar extensión
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+            var ext = Path.GetExtension(file.FileName).ToLower();
+
+            if (!allowedExtensions.Contains(ext))
+                return BadRequest("Invalid file type");
+
+            // 🔹 Generar nombre único
+            var fileName = $"{Guid.NewGuid()}{ext}";
+
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+
+            var filePath = Path.Combine(folderPath, fileName);
+
+            // 🔹 Guardar archivo
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var imageUrl = $"/images/{fileName}";
+
+            // 🔹 Guardar en DB
+            await _stService.UpdateStoryImage(storyId, imageUrl);
+
+            return Ok(new { imageUrl });
+        }
+
     }
 }

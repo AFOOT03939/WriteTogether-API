@@ -91,5 +91,45 @@ namespace WriteTogether.Features.Stories
             return result;
         }
 
+        public async Task<StoriesModel?> GetStoryById(int storyId)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                SELECT 
+                    id AS StoryId,
+                    title AS Title,
+                    description AS Description,
+                    creator_user_id AS UserId,
+                    status AS Status,
+                    visibility AS Visibility,
+                    image_url AS ImageUrl
+                FROM stories
+                WHERE id = @StoryId;
+            ";
+
+            return await connection.QueryFirstOrDefaultAsync<StoriesModel>(sql, new
+            {
+                StoryId = storyId
+            });
+        }
+
+        public async Task<int> UpdateStoryImage(int storyId, string imageUrl)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                    UPDATE stories
+                    SET image_url = @ImageUrl
+                    WHERE id = @StoryId;
+                ";
+
+            return await connection.ExecuteAsync(sql, new
+            {
+                StoryId = storyId,
+                ImageUrl = imageUrl
+            });
+        }
+
     }
 }

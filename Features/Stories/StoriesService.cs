@@ -57,5 +57,16 @@ namespace WriteTogether.Features.Stories
 
             return result > 0;
         }
+
+        public async Task<StoriesModel?> GetStoryById(int storyId)
+        {
+            return await _repo.GetStoryById(storyId);
+        }
+
+        public async Task<bool> UpdateStoryImage(int storyId, string imageUrl)
+        {
+            var result = await _repo.UpdateStoryImage(storyId, imageUrl);
+            return result > 0;
+        }
     }
 }

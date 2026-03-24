@@ -53,10 +53,30 @@ namespace WriteTogether.Features.Users
             if (file == null || file.Length == 0)
                 return BadRequest("Invalid file");
 
-            // Generar nombre único
+            // 🔹 Obtener usuario actual
+            var user = await _userService.GetUserById(userId);
+
+            if (user == null)
+                return NotFound();
+
+            // 🔥 BORRAR imagen anterior si existe
+            if (!string.IsNullOrEmpty(user.ImageUrl))
+            {
+                var oldPath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    user.ImageUrl.TrimStart('/')
+                );
+
+                if (System.IO.File.Exists(oldPath))
+                {
+                    System.IO.File.Delete(oldPath);
+                }
+            }
+
+            // 🔹 Generar nombre único
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
 
-            // Ruta física
             var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
 
             if (!Directory.Exists(folderPath))
@@ -64,13 +84,12 @@ namespace WriteTogether.Features.Users
 
             var filePath = Path.Combine(folderPath, fileName);
 
-            // Guardar archivo
+            // 🔹 Guardar nueva imagen
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
 
-            // URL pública
             var imageUrl = $"/images/{fileName}";
 
             await _userService.UpdateUserImage(userId, imageUrl);
