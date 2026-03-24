@@ -53,13 +53,13 @@ namespace WriteTogether.Features.Users
             if (file == null || file.Length == 0)
                 return BadRequest("Invalid file");
 
-            // 🔹 Obtener usuario actual
+            // Obtener usuario actual
             var user = await _userService.GetUserById(userId);
 
             if (user == null)
                 return NotFound();
 
-            // 🔥 BORRAR imagen anterior si existe
+            // BORRAR imagen anterior si existe
             if (!string.IsNullOrEmpty(user.ImageUrl))
             {
                 var oldPath = Path.Combine(
@@ -74,7 +74,7 @@ namespace WriteTogether.Features.Users
                 }
             }
 
-            // 🔹 Generar nombre único
+            // Generar nombre único
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
 
             var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
@@ -84,7 +84,7 @@ namespace WriteTogether.Features.Users
 
             var filePath = Path.Combine(folderPath, fileName);
 
-            // 🔹 Guardar nueva imagen
+            // Guardar nueva imagen
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);

@@ -10,6 +10,7 @@ using WriteTogether.Features.Stories;
 using WriteTogether.Features.StoriesAll;
 using WriteTogether.Features.Tags;
 using WriteTogether.Features.Users;
+using WriteTogether.Features.StoriesMessages;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,9 @@ builder.Services.AddScoped<StoriesAllRepository>();
 
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<UsersRepository>();
+
+builder.Services.AddScoped<StoriesMessagesService>();
+builder.Services.AddScoped<StoriesMessagesRepository>();
 
 
 builder.Services.AddSingleton<DbConnection>();   

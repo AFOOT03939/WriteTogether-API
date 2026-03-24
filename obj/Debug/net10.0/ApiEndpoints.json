@@ -311,6 +311,75 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WriteTogether.Features.StoriesMessages.StoriesMessagesController",
+    "Method": "Create",
+    "RelativePath": "api/story-messages",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "message",
+        "Type": "WriteTogether.Features.StoriesMessages.StoriesMessagesModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.StoriesMessages.StoriesMessagesController",
+    "Method": "Update",
+    "RelativePath": "api/story-messages/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "message",
+        "Type": "WriteTogether.Features.StoriesMessages.StoriesMessagesModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.StoriesMessages.StoriesMessagesController",
+    "Method": "Delete",
+    "RelativePath": "api/story-messages/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.StoriesMessages.StoriesMessagesController",
+    "Method": "GetByStory",
+    "RelativePath": "api/story-messages/story/{storyId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WriteTogether.Features.Tags.TagsController",
     "Method": "CreateTags",
     "RelativePath": "api/tags",
