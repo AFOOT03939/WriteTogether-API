@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.Win32;
 using WriteTogether.Dapper;
 using WriteTogether.Features.Ratings;
 
@@ -31,6 +32,27 @@ namespace WriteTogether.Features.Stories
             var result = await connection.QueryAsync<StoriesModel>(sql);
 
             return result;
+
+        }
+
+        public async Task<bool> CreateStoryTag(int storyId, int tagId)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                INSERT INTO story_tags (story_id, tag_id)
+                VALUES (@StoryId, @TagId);
+                ";
+
+            var parameters = new
+            {
+                StoryId = storyId,
+                TagId = tagId
+            };
+
+            var result = await connection.ExecuteScalarAsync<int>(sql, parameters);
+
+            return result > 0;
 
         }
 

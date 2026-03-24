@@ -81,7 +81,7 @@ namespace WriteTogether.Features.Fragments
                 BEGIN
                     INSERT INTO fragments (story_id, author_id, content, order_index, image_url, created_at, created_by)
                     OUTPUT INSERTED.id
-                    VALUES (@StoryId, @UserId, @Content, @OrderIndex, ImageUrl, @CreatedAt, @CreatedBy);
+                    VALUES (@StoryId, @UserId, @Content, @OrderIndex, @ImageUrl, @CreatedAt, @CreatedBy);
                 END
                 ";
 

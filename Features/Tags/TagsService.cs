@@ -17,6 +17,13 @@ namespace WriteTogether.Features.Tags
             return result;
         }
 
+        public async Task<int> GetTagsByName(string name)
+        {
+            var result = await _repo.GetTagsByName(name);
+
+            return result;
+        }
+
         public async Task<int> CreateTags(string name)
         {
             var result = await _repo.CreateTags(name);

@@ -15,7 +15,7 @@ namespace WriteTogether.Features.Tags
             _tagService = tagService;
         }
 
-        [HttpGet]
+        [HttpGet("stories/{storyId}")]
         public async Task<IActionResult> GetTagsByStory(int storyId)
         {
             IEnumerable<TagsModel> tags;
@@ -33,10 +33,28 @@ namespace WriteTogether.Features.Tags
             return Ok(tags);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateTags(string name)
+        [HttpGet("name/{name}")]
+        public async Task<IActionResult> GetTagsByName(string name)
         {
             int tags;
+
+            try
+            {
+                tags = await _tagService.GetTagsByName(name);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(tags);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTags([FromBody] string name)
+        {
+            int tagId;
 
             if (name == null)
             {
@@ -45,7 +63,7 @@ namespace WriteTogether.Features.Tags
 
             try
             {
-                tags = await _tagService.CreateTags(name);
+                tagId = await _tagService.CreateTags(name);
 
             }
             catch (Exception ex)
@@ -53,7 +71,7 @@ namespace WriteTogether.Features.Tags
                 return BadRequest(ex.Message);
             }
 
-            return Ok($"Tags succesfully added: id={tags}");
+            return Ok($"Tags succesfully added: id={tagId}");
         }
     }
 }

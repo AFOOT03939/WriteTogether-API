@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WriteTogether.Features.Categories;
+using WriteTogether.Features.Tags;
 
 namespace WriteTogether.Features.Stories
 {
@@ -30,6 +31,27 @@ namespace WriteTogether.Features.Stories
             
             return Ok(stories);
             
+        }
+
+        [HttpPost("{storyId}")]
+        public async Task<IActionResult> AddTagsToStory(int storyId, TagsDto content)
+        {
+            if (storyId <= 0)
+                return BadRequest("Invalid story");
+
+            if (content == null)
+                return BadRequest("Invalid tag");
+
+            try
+            {
+                await _stService.AddTagsToStory(storyId, content);
+
+                return Ok("Tags added");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

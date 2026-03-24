@@ -34,6 +34,23 @@ namespace WriteTogether.Features.Tags
             return result;
         }
 
+        public async Task<int> GetTagsByName(string name)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                    SELECT id FROM tags
+                    WHERE LOWER(name) = LOWER(@Name);
+                    ";
+
+            var result = await connection.QueryFirstOrDefaultAsync<int>(sql, new
+            {
+                Name = name
+            });
+
+            return result;
+        }
+
         public async Task<int> CreateTags(string name)
         {
             using var connection = _connection.CreateConnection();

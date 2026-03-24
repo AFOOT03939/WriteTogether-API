@@ -179,9 +179,62 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WriteTogether.Features.Stories.StoriesController",
+    "Method": "AddTagsToStory",
+    "RelativePath": "api/stories/{storyId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "content",
+        "Type": "WriteTogether.Features.Stories.TagsDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Tags.TagsController",
+    "Method": "CreateTags",
+    "RelativePath": "api/tags",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Tags.TagsController",
+    "Method": "GetTagsByName",
+    "RelativePath": "api/tags/name/{name}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WriteTogether.Features.Tags.TagsController",
     "Method": "GetTagsByStory",
-    "RelativePath": "api/tags",
+    "RelativePath": "api/tags/stories/{storyId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -189,7 +242,7 @@
       {
         "Name": "storyId",
         "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
