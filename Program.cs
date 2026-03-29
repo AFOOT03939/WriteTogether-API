@@ -11,6 +11,8 @@ using WriteTogether.Features.StoriesAll;
 using WriteTogether.Features.Tags;
 using WriteTogether.Features.Users;
 using WriteTogether.Features.StoriesMessages;
+using WriteTogether.Features.ChatRooms;
+using WriteTogether.Features.ChatMessages;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +54,12 @@ builder.Services.AddScoped<UsersRepository>();
 
 builder.Services.AddScoped<StoriesMessagesService>();
 builder.Services.AddScoped<StoriesMessagesRepository>();
+
+builder.Services.AddScoped<ChatRoomsService>();
+builder.Services.AddScoped<ChatRoomsRepository>();
+
+builder.Services.AddScoped<ChatMessageRepository>();
+builder.Services.AddScoped<ChatMessageRepository>();
 
 
 builder.Services.AddSingleton<DbConnection>();   
