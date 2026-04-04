@@ -26,7 +26,9 @@ namespace WriteTogether.Features.Authorization
 
             var token = await _authService.Login(request);
 
-            return Ok(new {token});
+            var name = await _authService.FetchUsers(request);
+
+            return Ok(new {token, name});
         }
     }
 }

@@ -3,7 +3,6 @@ using WriteTogether.Dapper;
 using WriteTogether.Features.Authorization;
 using WriteTogether.Features.Register;
 using WriteTogether.Features.Categories;
-using WriteTogether.Features.Profile;
 using WriteTogether.Features.Ratings;
 using WriteTogether.Features.Fragments;
 using WriteTogether.Features.Stories;
@@ -30,9 +29,6 @@ builder.Services.AddScoped<RegisterRepository>();
 
 builder.Services.AddScoped<CategoriesService>();
 builder.Services.AddScoped<CategoriesRepository>();
-
-builder.Services.AddScoped<ProfileService>();
-builder.Services.AddScoped<ProfileRepository>();
 
 builder.Services.AddScoped<RatingsService>();
 builder.Services.AddScoped<RatingsRepository>();

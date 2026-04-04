@@ -42,6 +42,166 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WriteTogether.Features.ChatMessages.ChatMessageController",
+    "Method": "CreateMessage",
+    "RelativePath": "api/chatmessage",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "WriteTogether.Features.ChatMessages.ChatMessageModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChatMessages.ChatMessageController",
+    "Method": "UpdateMessage",
+    "RelativePath": "api/chatmessage",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "WriteTogether.Features.ChatMessages.ChatMessageModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChatMessages.ChatMessageController",
+    "Method": "GetMessageById",
+    "RelativePath": "api/chatmessage/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChatMessages.ChatMessageController",
+    "Method": "DeleteMessage",
+    "RelativePath": "api/chatmessage/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChatMessages.ChatMessageController",
+    "Method": "GetMessagesByRoom",
+    "RelativePath": "api/chatmessage/room/{roomId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roomId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChatMessages.ChatMessageController",
+    "Method": "DeleteMessagesByRoom",
+    "RelativePath": "api/chatmessage/room/{roomId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roomId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChatRooms.ChatRoomsController",
+    "Method": "CreateChatRoom",
+    "RelativePath": "api/chatrooms",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChatRooms.ChatRoomsController",
+    "Method": "DeleteChatRoom",
+    "RelativePath": "api/chatrooms/{chatRoomId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "chatRoomId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChatRooms.ChatRoomsController",
+    "Method": "GetStoriesMessages",
+    "RelativePath": "api/chatrooms/{storyId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChatRooms.ChatRoomsController",
+    "Method": "DeleteByStory",
+    "RelativePath": "api/chatrooms/story/{storyId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WriteTogether.Features.Fragments.FragmentsController",
     "Method": "CreateFragments",
     "RelativePath": "api/fragments",
@@ -106,13 +266,51 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WriteTogether.Features.Profile.ProfileController",
-    "Method": "Get",
-    "RelativePath": "api/profile",
+    "ContainingType": "WriteTogether.Features.LoreEntities.LoreEntitiesController",
+    "Method": "Create",
+    "RelativePath": "api/loreentities",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "WriteTogether.Features.LoreEntities.LoreEntitiesModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.LoreEntities.LoreEntitiesController",
+    "Method": "Delete",
+    "RelativePath": "api/loreentities/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.LoreEntities.LoreEntitiesController",
+    "Method": "GetByStory",
+    "RelativePath": "api/loreentities/story/{storyId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

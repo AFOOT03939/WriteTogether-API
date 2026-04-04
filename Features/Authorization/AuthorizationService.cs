@@ -27,6 +27,22 @@ namespace WriteTogether.Features.Authorization
             return GenerateTokenJwt(user.UserId, user.Email);
         }
 
+        public async Task<string?> FetchUsers(AuthorizationModel request)
+        {
+            var user = await _repo.GetUserByEmail(request.Email);
+
+            if (user == null)
+                return null;
+
+            if (user.UserName == null)
+                return null;
+
+            if (user.Password != request.Password)
+                return null;
+
+            return user.UserName;
+        }
+
         public string GenerateTokenJwt(int userId, string email)
         {
             var secretKey = _config["Jwt:Key"];

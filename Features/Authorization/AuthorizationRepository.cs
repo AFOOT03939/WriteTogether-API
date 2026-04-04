@@ -15,7 +15,7 @@ namespace WriteTogether.Features.Authorization
         {
             using var connection = _connection.CreateConnection();
 
-            var sql = "SELECT id AS UserId, email as Email, password as Password FROM users WHERE email = @Email";
+            var sql = "SELECT id AS UserId, username as UserName, email as Email, password as Password FROM users WHERE email = @Email";
 
             return await connection.QueryFirstOrDefaultAsync<AuthorizationModel>(
                 sql,
