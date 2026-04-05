@@ -394,6 +394,22 @@
   },
   {
     "ContainingType": "WriteTogether.Features.Stories.StoriesController",
+    "Method": "getStoryById",
+    "RelativePath": "api/stories/{storyId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Stories.StoriesController",
     "Method": "AddTagsToStory",
     "RelativePath": "api/stories/{storyId}",
     "HttpMethod": "POST",

@@ -12,7 +12,7 @@ namespace WriteTogether.Features.Stories
         {
             _connection = connection;
         }
-
+        /*
         public async Task<IEnumerable<StoriesModel>> GetAllStories()
         {
             using var connection = _connection.CreateConnection();
@@ -25,9 +25,61 @@ namespace WriteTogether.Features.Stories
                     creator_user_id AS UserId,
                     status AS Status,
                     visibility AS Visibility,
-                    image_url AS ImageUrl
-                FROM stories;
+                    image_url AS ImageUrl,
+                    created_at AS CreatedAt
+                FROM stories
+                INNER JOIN tags
+                ON 
+                ;
                 ";
+
+            var result = await connection.QueryAsync<StoriesModel>(sql);
+
+            return result;
+
+        }
+
+        */
+
+        public async Task<IEnumerable<StoriesModel>> GetAllStories()
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                SELECT 
+                    s.id AS StoryId,
+                    s.title AS Title,
+                    s.description AS Description,
+                    s.image_url AS ImageUrl,
+                    s.created_at AS CreatedAt,
+                    s.status AS Status,
+                    s.visibility AS Visibility,
+                    u.username AS AuthorName,
+                    STRING_AGG(c.name, ', ') AS Categories,
+                    FLOOR(AVG(r.rating_value)) AS Rating
+                FROM stories s
+                INNER JOIN users u 
+                    ON s.creator_user_id = u.id
+
+                LEFT JOIN story_categories sc 
+                    ON s.id = sc.story_id
+
+                LEFT JOIN categories c 
+                    ON sc.category_id = c.id
+                
+                INNER JOIN ratings r
+                    ON s.id = r.story_id
+                
+                GROUP BY 
+                    s.id,
+                    s.title,
+                    s.description,
+                    s.status,
+                    s.image_url,
+                    s.created_at,
+                    u.username,
+                    s.visibility
+                    ";
 
             var result = await connection.QueryAsync<StoriesModel>(sql);
 
@@ -90,7 +142,7 @@ namespace WriteTogether.Features.Stories
 
             return result;
         }
-
+        /*
         public async Task<StoriesModel?> GetStoryById(int storyId)
         {
             using var connection = _connection.CreateConnection();
@@ -103,10 +155,62 @@ namespace WriteTogether.Features.Stories
                     creator_user_id AS UserId,
                     status AS Status,
                     visibility AS Visibility,
-                    image_url AS ImageUrl
+                    image_url AS ImageUrl,
+                    created_at AS CreatedAt
                 FROM stories
                 WHERE id = @StoryId;
             ";
+
+            return await connection.QueryFirstOrDefaultAsync<StoriesModel>(sql, new
+            {
+                StoryId = storyId
+            });
+        }
+        */
+
+        public async Task<StoriesModel?> GetStoryById(int storyId)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                    SELECT 
+                        s.id AS StoryId,
+                        s.title AS Title,
+                        s.description AS Description,
+                        s.creator_user_id AS UserId,
+                        s.status AS Status,
+                        s.visibility AS Visibility,
+                        s.image_url AS ImageUrl,
+                        s.created_at AS CreatedAt,
+                        u.username AS AuthorName,
+                        STRING_AGG(c.name, ', ') AS Categories,
+                        FLOOR(AVG(r.rating_value)) AS Rating
+                    FROM stories s
+                    INNER JOIN users u 
+                        ON s.creator_user_id = u.id
+
+                    LEFT JOIN story_categories sc 
+                        ON s.id = sc.story_id
+
+                    LEFT JOIN categories c 
+                        ON sc.category_id = c.id
+
+                    LEFT JOIN ratings r
+                        ON s.id = r.story_id
+
+                    WHERE s.id = @StoryId
+
+                    GROUP BY 
+                        s.id,
+                        s.title,
+                        s.description,
+                        s.creator_user_id,
+                        s.status,
+                        s.visibility,
+                        s.image_url,
+                        s.created_at,
+                        u.username
+                ";
 
             return await connection.QueryFirstOrDefaultAsync<StoriesModel>(sql, new
             {

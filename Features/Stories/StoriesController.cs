@@ -33,6 +33,25 @@ namespace WriteTogether.Features.Stories
             
         }
 
+        [HttpGet("{storyId}")]
+        public async Task<IActionResult> getStoryById(int storyId)
+        {
+
+            StoriesModel? story;
+
+            try
+            {
+                story = await _stService.GetStoryById(storyId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(story);
+
+        }
+
         [HttpPost("{storyId}")]
         public async Task<IActionResult> AddTagsToStory(int storyId, TagsDto content)
         {
@@ -104,13 +123,13 @@ namespace WriteTogether.Features.Stories
             if (file == null || file.Length == 0)
                 return BadRequest("Invalid file");
 
-            // 🔹 Obtener story actual
+            // Obtener story actual
             var story = await _stService.GetStoryById(storyId);
 
             if (story == null)
                 return NotFound();
 
-            // 🔥 BORRAR imagen anterior
+            // Borrar imagen anterior
             if (!string.IsNullOrEmpty(story.ImageUrl))
             {
                 var oldPath = Path.Combine(
@@ -125,14 +144,14 @@ namespace WriteTogether.Features.Stories
                 }
             }
 
-            // 🔹 Validar extensión
+            // Validar extensión
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
             var ext = Path.GetExtension(file.FileName).ToLower();
 
             if (!allowedExtensions.Contains(ext))
                 return BadRequest("Invalid file type");
 
-            // 🔹 Generar nombre único
+            // Generar nombre único
             var fileName = $"{Guid.NewGuid()}{ext}";
 
             var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
@@ -142,7 +161,7 @@ namespace WriteTogether.Features.Stories
 
             var filePath = Path.Combine(folderPath, fileName);
 
-            // 🔹 Guardar archivo
+            // Guardar archivo
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
@@ -150,7 +169,7 @@ namespace WriteTogether.Features.Stories
 
             var imageUrl = $"/images/{fileName}";
 
-            // 🔹 Guardar en DB
+            // Guardar en DB
             await _stService.UpdateStoryImage(storyId, imageUrl);
 
             return Ok(new { imageUrl });
