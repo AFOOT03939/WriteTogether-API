@@ -67,7 +67,7 @@ namespace WriteTogether.Features.Stories
                 LEFT JOIN categories c 
                     ON sc.category_id = c.id
                 
-                INNER JOIN ratings r
+                LEFT JOIN ratings r
                     ON s.id = r.story_id
                 
                 GROUP BY 
@@ -82,6 +82,64 @@ namespace WriteTogether.Features.Stories
                     ";
 
             var result = await connection.QueryAsync<StoriesModel>(sql);
+
+            return result;
+
+        }
+
+        public async Task<IEnumerable<StoriesModel>> GetStories(string? status, int? categoryId)
+        {
+            using var connection = _connection.CreateConnection();
+
+                var sql = @"
+                    SELECT 
+                        s.id AS StoryId,
+                        s.title AS Title,
+                        s.description AS Description,
+                        s.image_url AS ImageUrl,
+                        s.created_at AS CreatedAt,
+                        s.status AS Status,
+                        s.visibility AS Visibility,
+                        u.username AS AuthorName,
+                        STRING_AGG(c.name, ', ') AS Categories,
+                        FLOOR(AVG(r.rating_value)) AS Rating
+                    FROM stories s
+                    INNER JOIN users u 
+                        ON s.creator_user_id = u.id
+                    LEFT JOIN story_categories sc 
+                        ON s.id = sc.story_id
+                    LEFT JOIN categories c 
+                        ON sc.category_id = c.id
+                    LEFT JOIN ratings r 
+                        ON s.id = r.story_id
+                    WHERE 1=1 ";
+
+                        if (!string.IsNullOrEmpty(status))
+                        {
+                            sql += " AND s.status = @Status ";
+                        }
+
+                        if (categoryId.HasValue)
+                        {
+                            sql += @" AND EXISTS (
+                                SELECT 1 
+                                FROM story_categories sc2 
+                                WHERE sc2.story_id = s.id AND sc2.category_id = @CategoryId
+                                ) ";
+                        }
+                        sql += @"
+                    GROUP BY 
+                        s.id,
+                        s.title,
+                        s.description,
+                        s.status,
+                        s.image_url,
+                        s.created_at,
+                        u.username,
+                        s.visibility
+                ";
+
+            var result = await connection.QueryAsync<StoriesModel>(sql, new { Status = status, CategoryId = categoryId });
 
             return result;
 

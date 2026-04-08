@@ -33,6 +33,25 @@ namespace WriteTogether.Features.Stories
             
         }
 
+        [HttpGet("filtered")]
+        public async Task<IActionResult> getStoriesFiltered([FromQuery] string? status, [FromQuery] int? categoryId)
+        {
+
+            IEnumerable<StoriesModel> stories;
+
+            try
+            {
+                stories = await _stService.GetStories(status, categoryId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(stories);
+
+        }
+
         [HttpGet("{storyId}")]
         public async Task<IActionResult> getStoryById(int storyId)
         {

@@ -488,6 +488,27 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WriteTogether.Features.Stories.StoriesController",
+    "Method": "getStoriesFiltered",
+    "RelativePath": "api/stories/filtered",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "categoryId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WriteTogether.Features.StoriesAll.StoriesAllController",
     "Method": "GetFullStoryByStory",
     "RelativePath": "api/storiesAll/{storyId}",

@@ -20,6 +20,13 @@ namespace WriteTogether.Features.Stories
             return stories;
         }
 
+        public async Task<IEnumerable<StoriesModel>> GetStories(string? status, int? categoryId)
+        {
+            var stories = await _repo.GetStories(status, categoryId);
+
+            return stories;
+        }
+
         public async Task<bool> AddTagsToStory(int storyId, TagsDto content)
         {
             var tagId = await _tagsrepo.GetTagsByName(content.Content);
