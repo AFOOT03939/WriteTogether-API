@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using WriteTogether.Dapper;
 namespace WriteTogether.Features.Users
 {
@@ -31,23 +32,20 @@ namespace WriteTogether.Features.Users
             });
         }
 
-        public async Task<int> UpdateUser(int userId, string username, string? imageUrl)
+        public async Task<int> UpdateUser(int userId, string userName)
         {
             using var connection = _connection.CreateConnection();
 
             var sql = @"
                 UPDATE users
-                SET 
-                    username = @Username,
-                    image_url = COALESCE(@ImageUrl, image_url)
+                SET username = @Username
                 WHERE id = @UserId;
             ";
 
             return await connection.ExecuteAsync(sql, new
             {
                 UserId = userId,
-                Username = username,
-                ImageUrl = imageUrl
+                Username = userName,
             });
         }
         public async Task<int> UpdateUserImage(int userId, string imageUrl)

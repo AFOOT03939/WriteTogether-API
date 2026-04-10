@@ -33,17 +33,14 @@ namespace WriteTogether.Features.Users
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto dto)
+        public async Task<IActionResult> UpdateUser([FromBody] string userName)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (userId == null)
                 return Unauthorized("Token inválido o sin ID");
 
-            if (dto == null || string.IsNullOrWhiteSpace(dto.Username))
-                return BadRequest("Invalid data");
-
-            var success = await _userService.UpdateUser(int.Parse(userId), dto);
+            var success = await _userService.UpdateUser(int.Parse(userId), userName);
 
             if (!success)
                 return NotFound();

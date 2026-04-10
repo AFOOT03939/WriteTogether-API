@@ -29,17 +29,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
+                "type": "string"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
+                "type": "string"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
+                "type": "string"
               }
             }
           },
@@ -1608,23 +1608,6 @@
         "properties": {
           "content": {
             "type": "string"
-          }
-        }
-      },
-      "UpdateUserDto": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "imageUrl": {
-            "type": [
-              "null",
-              "string"
-            ]
           }
         }
       }

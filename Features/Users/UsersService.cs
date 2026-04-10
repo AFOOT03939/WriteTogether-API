@@ -15,9 +15,9 @@
             return await _repo.GetUserById(userId);
         }
 
-        public async Task<bool> UpdateUser(int userId, UpdateUserDto dto)
+        public async Task<bool> UpdateUser(int userId, string userName)
         {
-            var result = await _repo.UpdateUser(userId, dto.Username, dto.ImageUrl);
+            var result = await _repo.UpdateUser(userId, userName);
 
             return result > 0;
         }
