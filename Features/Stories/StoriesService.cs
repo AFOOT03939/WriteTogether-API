@@ -70,6 +70,11 @@ namespace WriteTogether.Features.Stories
             return await _repo.GetStoryById(storyId);
         }
 
+        public async Task<StoriesModel?> GetStoryByUser(int userId)
+        {
+            return await _repo.GetStoryByUser(userId);
+        }
+
         public async Task<bool> UpdateStoryImage(int storyId, string imageUrl)
         {
             var result = await _repo.UpdateStoryImage(storyId, imageUrl);

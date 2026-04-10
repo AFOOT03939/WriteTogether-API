@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WriteTogether.Features.Fragments;
 
 namespace WriteTogether.Features.Users
@@ -13,13 +14,16 @@ namespace WriteTogether.Features.Users
             _userService = userService;
         }
 
-        [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUser(int userId)
+        [HttpGet]
+        public async Task<IActionResult> GetUser()
         {
-            if (userId <= 0)
-                return BadRequest("Invalid user");
 
-            var user = await _userService.GetUserById(userId);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized("Token inválido o sin ID");
+
+            var user = await _userService.GetUserById(int.Parse(userId));
 
             if (user == null)
                 return NotFound();
@@ -27,16 +31,18 @@ namespace WriteTogether.Features.Users
             return Ok(user);
         }
 
-        [HttpPut("{userId}")]
-        public async Task<IActionResult> UpdateUser(int userId, [FromBody] UpdateUserDto dto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto dto)
         {
-            if (userId <= 0)
-                return BadRequest("Invalid user");
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized("Token inválido o sin ID");
 
             if (dto == null || string.IsNullOrWhiteSpace(dto.Username))
                 return BadRequest("Invalid data");
 
-            var success = await _userService.UpdateUser(userId, dto);
+            var success = await _userService.UpdateUser(int.Parse(userId), dto);
 
             if (!success)
                 return NotFound();
@@ -44,17 +50,19 @@ namespace WriteTogether.Features.Users
             return NoContent();
         }
 
-        [HttpPost("{userId}/image")]
-        public async Task<IActionResult> UploadUserImage(int userId, IFormFile file)
+        [HttpPost("image")]
+        public async Task<IActionResult> UploadUserImage(IFormFile file)
         {
-            if (userId <= 0)
-                return BadRequest("Invalid user");
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized("Token inválido o sin ID");
 
             if (file == null || file.Length == 0)
                 return BadRequest("Invalid file");
 
             // Obtener usuario actual
-            var user = await _userService.GetUserById(userId);
+            var user = await _userService.GetUserById(int.Parse(userId));
 
             if (user == null)
                 return NotFound();
@@ -92,7 +100,7 @@ namespace WriteTogether.Features.Users
 
             var imageUrl = $"/images/{fileName}";
 
-            await _userService.UpdateUserImage(userId, imageUrl);
+            await _userService.UpdateUserImage(int.Parse(userId), imageUrl);
 
             return Ok(new { imageUrl });
         }

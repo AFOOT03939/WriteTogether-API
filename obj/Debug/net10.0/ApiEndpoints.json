@@ -489,6 +489,22 @@
   },
   {
     "ContainingType": "WriteTogether.Features.Stories.StoriesController",
+    "Method": "getStoryByUser",
+    "RelativePath": "api/stories/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Stories.StoriesController",
     "Method": "getStoriesFiltered",
     "RelativePath": "api/stories/filtered",
     "HttpMethod": "GET",

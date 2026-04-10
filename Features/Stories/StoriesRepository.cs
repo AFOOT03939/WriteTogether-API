@@ -276,6 +276,56 @@ namespace WriteTogether.Features.Stories
             });
         }
 
+        public async Task<StoriesModel?> GetStoryByUser(int userId)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                    SELECT 
+                        s.id AS StoryId,
+                        s.title AS Title,
+                        s.description AS Description,
+                        s.creator_user_id AS UserId,
+                        s.status AS Status,
+                        s.visibility AS Visibility,
+                        s.image_url AS ImageUrl,
+                        s.created_at AS CreatedAt,
+                        u.username AS AuthorName,
+                        STRING_AGG(c.name, ', ') AS Categories,
+                        FLOOR(AVG(r.rating_value)) AS Rating
+                    FROM stories s
+                    INNER JOIN users u 
+                        ON s.creator_user_id = u.id
+
+                    LEFT JOIN story_categories sc 
+                        ON s.id = sc.story_id
+
+                    LEFT JOIN categories c 
+                        ON sc.category_id = c.id
+
+                    LEFT JOIN ratings r
+                        ON s.id = r.story_id
+
+                    WHERE s.creator_user_id = @UserId
+
+                    GROUP BY 
+                        s.id,
+                        s.title,
+                        s.description,
+                        s.creator_user_id,
+                        s.status,
+                        s.visibility,
+                        s.image_url,
+                        s.created_at,
+                        u.username
+                ";
+
+            return await connection.QueryFirstOrDefaultAsync<StoriesModel>(sql, new
+            {
+                UserId = userId
+            });
+        }
+
         public async Task<int> UpdateStoryImage(int storyId, string imageUrl)
         {
             using var connection = _connection.CreateConnection();

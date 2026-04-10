@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WriteTogether.Features.Categories;
 
 namespace WriteTogether.Features.Fragments
@@ -13,17 +14,19 @@ namespace WriteTogether.Features.Fragments
             _fragService = fragService;
         }
 
-        [HttpGet("users/{userId}")]
-        public async Task<IActionResult> GetFragmentsByUser(int userId)
+        [HttpGet("user")]
+        public async Task<IActionResult> GetFragmentsByUser()
         {
-            if (userId <= 0)
-                return BadRequest("Invalid User");
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized("Token inválido o sin ID");
 
             IEnumerable<FragmentsModel> fragments;
 
             try
             {
-                fragments = await _fragService.GetFragmentsByUser(userId);
+                fragments = await _fragService.GetFragmentsByUser(int.Parse(userId));
             }catch (Exception ex)
             {
                 return BadRequest(ex.Message);

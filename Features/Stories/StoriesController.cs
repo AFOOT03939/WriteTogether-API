@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WriteTogether.Features.Categories;
 using WriteTogether.Features.Tags;
 
@@ -61,6 +62,30 @@ namespace WriteTogether.Features.Stories
             try
             {
                 story = await _stService.GetStoryById(storyId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(story);
+
+        }
+
+        [HttpGet("user")]
+        public async Task<IActionResult> getStoryByUser()
+        {
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized("Token inválido o sin ID");
+
+            StoriesModel? story;
+
+            try
+            {
+                story = await _stService.GetStoryByUser(int.Parse(userId));
             }
             catch (Exception ex)
             {
