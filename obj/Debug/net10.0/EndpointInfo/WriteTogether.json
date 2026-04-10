@@ -10,25 +10,10 @@
     }
   ],
   "paths": {
-    "/api/users/{userId}": {
+    "/api/users": {
       "get": {
         "tags": [
           "Users"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
-              "format": "int32"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -39,21 +24,6 @@
       "put": {
         "tags": [
           "Users"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
-              "format": "int32"
-            }
-          }
         ],
         "requestBody": {
           "content": {
@@ -82,25 +52,10 @@
         }
       }
     },
-    "/api/users/{userId}/image": {
+    "/api/users/image": {
       "post": {
         "tags": [
           "Users"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
-              "format": "int32"
-            }
-          }
         ],
         "requestBody": {
           "content": {
@@ -347,25 +302,10 @@
         }
       }
     },
-    "/api/stories/{userId}": {
+    "/api/stories/user": {
       "get": {
         "tags": [
           "Stories"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
-              "format": "int32"
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -876,25 +816,10 @@
         }
       }
     },
-    "/api/fragments/users/{userId}": {
+    "/api/fragments/user": {
       "get": {
         "tags": [
           "Fragments"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
-              "format": "int32"
-            }
-          }
         ],
         "responses": {
           "200": {

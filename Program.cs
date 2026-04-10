@@ -1,26 +1,50 @@
-using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using WriteTogether.Dapper;
 using WriteTogether.Features.Authorization;
-using WriteTogether.Features.Register;
 using WriteTogether.Features.Categories;
-using WriteTogether.Features.Ratings;
+using WriteTogether.Features.ChatMessages;
+using WriteTogether.Features.ChatRooms;
 using WriteTogether.Features.Fragments;
+using WriteTogether.Features.Ratings;
+using WriteTogether.Features.Register;
 using WriteTogether.Features.Stories;
 using WriteTogether.Features.StoriesAll;
+using WriteTogether.Features.StoriesMessages;
 using WriteTogether.Features.Tags;
 using WriteTogether.Features.Users;
-using WriteTogether.Features.StoriesMessages;
-using WriteTogether.Features.ChatRooms;
-using WriteTogether.Features.ChatMessages;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// 🔐 Authentication (MOVER AQUÍ)
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+        )
+    };
+});
+
+// Services
 builder.Services.AddScoped<AuthorizationRepository>();
 builder.Services.AddScoped<AuthorizationService>();
 
@@ -54,24 +78,23 @@ builder.Services.AddScoped<StoriesMessagesRepository>();
 builder.Services.AddScoped<ChatRoomsService>();
 builder.Services.AddScoped<ChatRoomsRepository>();
 
-builder.Services.AddScoped<ChatMessageRepository>();
-builder.Services.AddScoped<ChatMessageRepository>();
+builder.Services.AddScoped<ChatMessageService>(); 
+builder.Services.AddScoped<ChatMessageRepository>(); 
 
-
-builder.Services.AddSingleton<DbConnection>();   
+builder.Services.AddScoped<DbConnection>(); 
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
