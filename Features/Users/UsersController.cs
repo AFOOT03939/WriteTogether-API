@@ -45,7 +45,7 @@ namespace WriteTogether.Features.Users
             if (!success)
                 return NotFound();
 
-            return NoContent();
+            return Ok();
         }
 
         [HttpPost("image")]
@@ -83,7 +83,7 @@ namespace WriteTogether.Features.Users
             // Generar nombre único
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
 
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "E:\\Users\\victo\\Downloads\\images");
 
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
@@ -102,6 +102,26 @@ namespace WriteTogether.Features.Users
 
             return Ok(new { imageUrl });
         }
-    }
 
+        [HttpGet("/images/{fileName}")]
+        [AllowAnonymous]
+        public IActionResult GetImage(string fileName)
+        {
+            var folderPath = "E:\\Users\\victo\\Downloads\\images";
+            var filePath = Path.Combine(folderPath, fileName);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+
+            var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(filePath, out string contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            return PhysicalFile(filePath, contentType);
+        }
+    }
 }

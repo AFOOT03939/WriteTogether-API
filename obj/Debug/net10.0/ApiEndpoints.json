@@ -707,5 +707,21 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Users.UsersController",
+    "Method": "GetImage",
+    "RelativePath": "images/{fileName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]
