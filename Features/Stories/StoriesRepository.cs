@@ -102,6 +102,7 @@ namespace WriteTogether.Features.Stories
                         s.visibility AS Visibility,
                         u.username AS AuthorName,
                         STRING_AGG(c.name, ', ') AS Categories,
+                        STRING_AGG(CAST(c.id AS VARCHAR), ',') AS CategoryIds
                         FLOOR(AVG(r.rating_value)) AS Rating
                     FROM stories s
                     INNER JOIN users u 
@@ -242,6 +243,7 @@ namespace WriteTogether.Features.Stories
                         s.created_at AS CreatedAt,
                         u.username AS AuthorName,
                         STRING_AGG(c.name, ', ') AS Categories,
+                        STRING_AGG(CAST(c.id AS VARCHAR), ',') AS CategoryIds,
                         FLOOR(AVG(r.rating_value)) AS Rating
                     FROM stories s
                     INNER JOIN users u 
@@ -292,6 +294,7 @@ namespace WriteTogether.Features.Stories
                         s.created_at AS CreatedAt,
                         u.username AS AuthorName,
                         STRING_AGG(c.name, ', ') AS Categories,
+                        STRING_AGG(CAST(c.id AS VARCHAR), ',') AS CategoryIds
                         FLOOR(AVG(r.rating_value)) AS Rating
                     FROM stories s
                     INNER JOIN users u 
@@ -340,6 +343,105 @@ namespace WriteTogether.Features.Stories
             {
                 StoryId = storyId,
                 ImageUrl = imageUrl
+            });
+        }
+
+        public async Task<int> CreateStory(StoriesModelRequest story)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                INSERT INTO stories (
+                    title,
+                    description,
+                    creator_user_id,
+                    status,
+                    visibility,
+                    image_url,
+                    created_at
+                )
+                VALUES (
+                    @Title,
+                    @Description,
+                    @UserId,
+                    @Status,
+                    @Visibility,
+                    @ImageUrl,
+                    GETDATE()
+                )
+                SELECT CAST(SCOPE_IDENTITY() as int);
+            ";
+
+            var storyId = await connection.ExecuteScalarAsync<int>(sql, new
+            {
+                story.Title,
+                story.Description,
+                story.UserId,
+                story.Status,
+                story.Visibility,
+                story.ImageUrl,
+            });
+
+            return storyId;
+        }
+
+        public async Task<int> UpdateStory(StoriesModel story)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                UPDATE stories
+                SET 
+                    title = @Title,
+                    description = @Description,
+                    status = @Status,
+                    visibility = @Visibility,
+                    image_url = @ImageUrl
+                WHERE id = @StoryId;
+            ";
+
+            var result = await connection.ExecuteAsync(sql, new
+            {
+                story.StoryId,
+                story.Title,
+                story.Description,
+                story.Status,
+                story.Visibility,
+                story.ImageUrl
+            });
+
+            return result;
+        }
+
+        public async Task<int> InsertStoryCategory(int storyId, int categoryId)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                INSERT INTO story_categories (story_id, category_id)
+                VALUES (@StoryId, @CategoryId);
+            ";
+
+            return await connection.ExecuteAsync(sql, new
+            {
+                StoryId = storyId,
+                CategoryId = categoryId
+            });
+        }
+
+        public async Task<int> DeleteStoryCategories(int storyId)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                DELETE FROM story_categories
+                WHERE story_id = @StoryId;
+            ";
+
+
+            return await connection.ExecuteAsync(sql, new
+            {
+                StoryId = storyId
             });
         }
 

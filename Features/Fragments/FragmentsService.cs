@@ -24,24 +24,43 @@ namespace WriteTogether.Features.Fragments
             return result;
         }
 
-        public async Task<int> CreateFragments(FragmentsModel fragment)
+        public async Task<int> CreateFragment(FragmentsModel fragment)
         {
-            var result = await _repo.CreateFragments(fragment);
+            if (fragment == null)
+                throw new ArgumentNullException(nameof(fragment));
+
+            if (string.IsNullOrWhiteSpace(fragment.Content))
+                throw new Exception("Content cannot be empty");
+
+            var result = await _repo.CreateFragment(fragment);
 
             if (result <= 0)
-                return 0;
+                throw new Exception("Error creating fragment");
 
             return result;
         }
 
-        public async Task<int> DeleteFragments(int fragmentId)
+        public async Task<bool> UpdateFragment(int fragmentId, string content, int currentUserId)
+        {
+            if (string.IsNullOrWhiteSpace(content))
+                throw new Exception("Content cannot be empty");
+
+            var fragments = await _repo.GetFragmentsByUser(currentUserId);
+            var fragment = fragments.FirstOrDefault(f => f.FragmentId == fragmentId);
+
+            if (fragment == null)
+                throw new UnauthorizedAccessException("You can't edit this fragment");
+
+            var result = await _repo.UpdateFragment(fragmentId, content);
+
+            return result > 0;
+        }
+
+        public async Task<bool> DeleteFragment(int fragmentId)
         {
             var result = await _repo.DeleteFragments(fragmentId);
 
-            if (result <= 0)
-                return 0;
-
-            return result;
+            return result > 0;
         }
     }
 }

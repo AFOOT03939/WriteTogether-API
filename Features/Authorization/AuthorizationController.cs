@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Xml.Linq;
 using WriteTogether.Features.Authorization;
 
@@ -29,6 +31,23 @@ namespace WriteTogether.Features.Authorization
             var name = await _authService.FetchUsers(request);
 
             return Ok(new {token, name});
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public IActionResult GetCurrentUser()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            var usernameClaim = User.FindFirst(ClaimTypes.Name);
+
+            if (userIdClaim == null || usernameClaim == null)
+                return Unauthorized("Invalid token");
+
+            return Ok(new
+            {
+                userId = int.Parse(userIdClaim.Value),
+                userName = usernameClaim.Value
+            });
         }
     }
 }

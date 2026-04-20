@@ -17,14 +17,17 @@ namespace WriteTogether.Features.StoriesMessages
 
             var sql = @"
                 SELECT 
-                    id AS MessageId,
-                    story_id AS StoryId,
-                    user_id AS UserId,
-                    message AS Message,
-                    image_url AS ImageUrl
-                FROM story_messages
-                WHERE story_id = @StoryId
-                ORDER BY id ASC;
+                sm.id AS MessageId,
+                sm.story_id AS StoryId,
+                sm.user_id AS UserId,
+                sm.message AS Message,
+                sm.image_url AS ImageUrl,
+                sm.created_at AS CreatedAt,
+                u.username AS UserName
+            FROM story_messages sm
+            INNER JOIN users u ON u.id = sm.user_id
+            WHERE sm.story_id = @StoryId
+            ORDER BY sm.id ASC;
             ";
 
             return await connection.QueryAsync<StoriesMessagesModel>(sql, new { StoryId = storyId });

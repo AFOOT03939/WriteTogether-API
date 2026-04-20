@@ -24,7 +24,7 @@ namespace WriteTogether.Features.Authorization
             if (user.Password != request.Password)
                 return null;
 
-            return GenerateTokenJwt(user.UserId, user.Email);
+            return GenerateTokenJwt(user.UserId, user.Email, user.UserName);
         }
 
         public async Task<string?> FetchUsers(AuthorizationModel request)
@@ -43,7 +43,7 @@ namespace WriteTogether.Features.Authorization
             return user.UserName;
         }
 
-        public string GenerateTokenJwt(int userId, string email)
+        public string GenerateTokenJwt(int userId, string email, string userName)
         {
             var secretKey = _config["Jwt:Key"];
 
@@ -55,6 +55,7 @@ namespace WriteTogether.Features.Authorization
             {
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.Name, userName),
             };
 
             var token = new JwtSecurityToken(

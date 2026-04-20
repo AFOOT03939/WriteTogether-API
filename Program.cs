@@ -11,6 +11,7 @@ using WriteTogether.Features.Ratings;
 using WriteTogether.Features.Register;
 using WriteTogether.Features.Stories;
 using WriteTogether.Features.StoriesAll;
+using WriteTogether.Features.StoriesCollaborators;
 using WriteTogether.Features.StoriesMessages;
 using WriteTogether.Features.Tags;
 using WriteTogether.Features.Users;
@@ -79,7 +80,10 @@ builder.Services.AddScoped<ChatRoomsService>();
 builder.Services.AddScoped<ChatRoomsRepository>();
 
 builder.Services.AddScoped<ChatMessageService>(); 
-builder.Services.AddScoped<ChatMessageRepository>(); 
+builder.Services.AddScoped<ChatMessageRepository>();
+
+builder.Services.AddScoped<StoriesCollaboratorsService>();
+builder.Services.AddScoped<StoriesCollaboratorsRepository>();
 
 builder.Services.AddScoped<DbConnection>(); 
 

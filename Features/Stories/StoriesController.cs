@@ -219,5 +219,58 @@ namespace WriteTogether.Features.Stories
             return Ok(new { imageUrl });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateStory([FromBody] StoriesModelRequest story)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized("Invalid token");
+
+            if (story == null)
+                return BadRequest("Invalid story data");
+
+            try
+            {
+                var storyId = await _stService.CreateStory(story, int.Parse(userId));
+
+                return Ok(new { storyId });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("{storyId}")]
+        public async Task<IActionResult> UpdateStory(int storyId, [FromBody] StoriesModel story)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized("Invalid token");
+
+            if (storyId <= 0 || story == null)
+                return BadRequest("Invalid data");
+
+            try
+            {
+                var success = await _stService.UpdateStory(storyId, story, int.Parse(userId));
+
+                if (!success)
+                    return NotFound();
+
+                return NoContent();
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

@@ -7,10 +7,12 @@ namespace WriteTogether.Features.Stories
     {
         private readonly StoriesRepository _repo;
         private readonly TagsRepository _tagsrepo;
-        public StoriesService(StoriesRepository repo, TagsRepository tagsrepo)
+        private readonly StoriesCollaboratorsRepository _collabRepo;
+        public StoriesService(StoriesRepository repo, TagsRepository tagsrepo, StoriesCollaboratorsRepository collabRepo)
         {
             _repo = repo;
             _tagsrepo = tagsrepo;
+            _collabRepo = collabRepo;
         }
 
         public async Task<IEnumerable<StoriesModel>> GetAllStories()
@@ -33,7 +35,7 @@ namespace WriteTogether.Features.Stories
 
             bool success;
 
-            //valida si ya existe el nombre del tag
+            // valida si ya existe el nombre del tag
             if(tagId == 0)
             {
                 var tagIdCreated = await _tagsrepo.CreateTags(content.Content);
@@ -78,6 +80,49 @@ namespace WriteTogether.Features.Stories
         public async Task<bool> UpdateStoryImage(int storyId, string imageUrl)
         {
             var result = await _repo.UpdateStoryImage(storyId, imageUrl);
+            return result > 0;
+        }
+
+        public async Task<int> CreateStory(StoriesModelRequest story, int UserId)
+        {
+            story.UserId = UserId;
+
+            var storyId = await _repo.CreateStory(story);
+
+            if (storyId <= 0)
+                throw new Exception("Error creating story");
+
+            if (story.CategoryIds != null && story.CategoryIds.Any())
+            {
+                foreach (var categoryId in story.CategoryIds)
+                {
+                    await _repo.InsertStoryCategory(storyId, categoryId);
+                }
+            }
+
+            return storyId;
+        }
+
+        public async Task<bool> UpdateStory(int storyId, StoriesModel updatedStory, int currentUserId)
+        {
+            var existingStory = await _repo.GetStoryById(storyId);
+
+            if (existingStory == null)
+                throw new Exception("Story not found");
+
+            // Si no es owner, verificar si es colaborador
+            if (existingStory.UserId != currentUserId)
+            {
+                var isCollaborator = await _collabRepo.IsCollaborator(storyId, currentUserId);
+
+                if (!isCollaborator)
+                    throw new UnauthorizedAccessException("You don't have permission to edit this story");
+            }
+
+            updatedStory.StoryId = storyId;
+
+            var result = await _repo.UpdateStory(updatedStory);
+
             return result > 0;
         }
     }

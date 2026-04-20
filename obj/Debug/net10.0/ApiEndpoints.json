@@ -16,6 +16,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WriteTogether.Features.Authorization.AuthorizationController",
+    "Method": "GetCurrentUser",
+    "RelativePath": "api/auth/me",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WriteTogether.Features.Categories.CategoriesController",
     "Method": "GetCategories",
     "RelativePath": "api/categories",
@@ -203,12 +213,17 @@
   },
   {
     "ContainingType": "WriteTogether.Features.Fragments.FragmentsController",
-    "Method": "CreateFragments",
-    "RelativePath": "api/fragments",
-    "HttpMethod": "POST",
+    "Method": "UpdateFragment",
+    "RelativePath": "api/fragments/{fragmentId}",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
+      {
+        "Name": "fragmentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
       {
         "Name": "fragment",
         "Type": "WriteTogether.Features.Fragments.FragmentsModel",
@@ -219,7 +234,7 @@
   },
   {
     "ContainingType": "WriteTogether.Features.Fragments.FragmentsController",
-    "Method": "DeleteFragments",
+    "Method": "DeleteFragment",
     "RelativePath": "api/fragments/{fragmentId}",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -244,6 +259,27 @@
       {
         "Name": "storyId",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Fragments.FragmentsController",
+    "Method": "CreateFragment",
+    "RelativePath": "api/fragments/stories/{storyId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "fragment",
+        "Type": "WriteTogether.Features.Fragments.FragmentsModel",
         "IsRequired": true
       }
     ],
@@ -388,6 +424,22 @@
   },
   {
     "ContainingType": "WriteTogether.Features.Stories.StoriesController",
+    "Method": "CreateStory",
+    "RelativePath": "api/stories",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "story",
+        "Type": "WriteTogether.Features.Stories.StoriesModelRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Stories.StoriesController",
     "Method": "getStoryById",
     "RelativePath": "api/stories/{storyId}",
     "HttpMethod": "GET",
@@ -428,6 +480,91 @@
     "Method": "DeleteStory",
     "RelativePath": "api/stories/{storyId}",
     "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Stories.StoriesController",
+    "Method": "UpdateStory",
+    "RelativePath": "api/stories/{storyId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "story",
+        "Type": "WriteTogether.Features.Stories.StoriesModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.StoriesCollaborators.StoriesCollaboratorsController",
+    "Method": "GetCollaborators",
+    "RelativePath": "api/stories/{storyId}/collaborators",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.StoriesCollaborators.StoriesCollaboratorsController",
+    "Method": "JoinStory",
+    "RelativePath": "api/stories/{storyId}/collaborators/join",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.StoriesCollaborators.StoriesCollaboratorsController",
+    "Method": "LeaveStory",
+    "RelativePath": "api/stories/{storyId}/collaborators/leave",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.StoriesCollaborators.StoriesCollaboratorsController",
+    "Method": "GetUserRole",
+    "RelativePath": "api/stories/{storyId}/collaborators/role",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [

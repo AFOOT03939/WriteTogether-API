@@ -17,16 +17,21 @@ namespace WriteTogether.Features.Fragments
             using var connection = _connection.CreateConnection();
 
             var sql = @"
-                    SELECT 
-                        id AS FragmentId, 
-                        story_id AS StoryId, 
-                        author_id as UserId, 
-                        content as Content, 
-                        order_index AS OrderIndex, 
-                        image_url AS ImageUrl
-                    FROM fragments
-                    WHERE story_id = @StoryId;
-                ";
+                SELECT 
+                    f.id AS FragmentId, 
+                    f.story_id AS StoryId, 
+                    f.author_id AS UserId, 
+                    f.content AS Content, 
+                    f.order_index AS OrderIndex, 
+                    f.image_url AS ImageUrl,
+                    f.created_at AS CreatedAt,
+                    u.username AS UserName
+                FROM fragments f
+                INNER JOIN users u 
+                ON u.id = f.author_id
+                WHERE f.story_id = @StoryId
+                ORDER BY f.order_index;
+            ";
 
             var result = await connection.QueryAsync<FragmentsModel>(sql, new
             {
@@ -41,16 +46,21 @@ namespace WriteTogether.Features.Fragments
             using var connection = _connection.CreateConnection();
 
             var sql = @"
-                    SELECT 
-                        id AS FragmentId, 
-                        story_id AS StoryId, 
-                        author_id as UserId, 
-                        content as Content, 
-                        order_index AS OrderIndex, 
-                        image_url AS ImageUrl
-                    FROM fragments
-                    WHERE author_id = @UserId;
-                ";
+                SELECT 
+                    f.id AS FragmentId, 
+                    f.story_id AS StoryId, 
+                    f.author_id AS UserId, 
+                    f.content AS Content, 
+                    f.order_index AS OrderIndex, 
+                    f.image_url AS ImageUrl,
+                    f.created_at AS CreatedAt,
+                    u.username AS UserName
+                FROM fragments f
+                INNER JOIN users u 
+                ON u.id = f.author_id
+                WHERE f.author_id = @UserId
+                ORDER BY f.created_at DESC;
+            ";
 
             var result = await connection.QueryAsync<FragmentsModel>(sql, new
             {
@@ -60,45 +70,75 @@ namespace WriteTogether.Features.Fragments
             return result;
         }
 
-        public async Task<int> CreateFragments(FragmentsModel fragment)
+        public async Task<int> CreateFragment(FragmentsModel fragment)
         {
             using var connection = _connection.CreateConnection();
 
-            var sql = @"
-                IF EXISTS (
-                    SELECT 1 FROM fragments 
-                    WHERE story_id = @StoryId AND author_id = @UserId
-                )
-                BEGIN
-                    UPDATE fragments
-                    SET content = @Content
-                    WHERE story_id = @StoryId AND author_id = @UserId;
+            // 🔥 calcular orden
+            var orderSql = @"
+        SELECT ISNULL(MAX(order_index), 0) + 1
+        FROM fragments
+        WHERE story_id = @StoryId;
+    ";
 
-                    SELECT id FROM fragments
-                    WHERE story_id = @StoryId AND author_id = @UserId;
-                END
-                ELSE
-                BEGIN
-                    INSERT INTO fragments (story_id, author_id, content, order_index, image_url, created_at, created_by)
-                    OUTPUT INSERTED.id
-                    VALUES (@StoryId, @UserId, @Content, @OrderIndex, @ImageUrl, @CreatedAt, @CreatedBy);
-                END
-                ";
+            var orderIndex = await connection.ExecuteScalarAsync<int>(orderSql, new
+            {
+                fragment.StoryId
+            });
+
+            var sql = @"
+                INSERT INTO fragments (
+                    story_id,
+                    author_id,
+                    content,
+                    order_index,
+                    image_url,
+                    created_at,
+                    created_by
+                )
+                OUTPUT INSERTED.id
+                VALUES (
+                    @StoryId,
+                    @UserId,
+                    @Content,
+                    @OrderIndex,
+                    @ImageUrl,
+                    @CreatedAt,
+                    @CreatedBy
+                );
+            ";
 
             var parameters = new
             {
                 fragment.StoryId,
                 fragment.UserId,
                 fragment.Content,
+                OrderIndex = orderIndex,
                 fragment.ImageUrl,
-                fragment.OrderIndex,
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy = "system"
             };
 
-            var fragmentId = await connection.ExecuteScalarAsync<int>(sql, parameters);
+            return await connection.ExecuteScalarAsync<int>(sql, parameters);
+        }
 
-            return fragmentId;
+        public async Task<int> UpdateFragment(int fragmentId, string content)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                UPDATE fragments
+                SET 
+                    content = @Content,
+                    updated_at = SYSDATETIME()
+                WHERE id = @FragmentId;
+            ";
+
+            return await connection.ExecuteAsync(sql, new
+            {
+                FragmentId = fragmentId,
+                Content = content
+            });
         }
 
         public async Task<int> DeleteFragments(int fragmentId)
@@ -110,7 +150,7 @@ namespace WriteTogether.Features.Fragments
                     WHERE id = @FragmentId
                 ";
 
-            var result = await connection.ExecuteScalarAsync<int>(sql, new
+            var result = await connection.ExecuteAsync(sql, new
             {
                 FragmentId = fragmentId
             });

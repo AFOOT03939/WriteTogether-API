@@ -56,46 +56,82 @@ namespace WriteTogether.Features.Fragments
             return Ok(fragments);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateFragments(FragmentsModel fragment)
+        [HttpPost("stories/{storyId}")]
+        public async Task<IActionResult> CreateFragment(int storyId, [FromBody] FragmentsModel fragment)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (fragment == null)
+            if (userId == null)
+                return Unauthorized("Invalid token");
+
+            if (fragment == null || string.IsNullOrWhiteSpace(fragment.Content))
                 return BadRequest("Invalid fragment");
-
-            int fragmentId;
 
             try
             {
-                fragmentId = await _fragService.CreateFragments(fragment);
+                fragment.StoryId = storyId;
+                fragment.UserId = int.Parse(userId);
+
+                var fragmentId = await _fragService.CreateFragment(fragment);
+
+                return Ok(new { fragmentId });
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+        }
 
-            return Ok(fragmentId);
+        [HttpPut("{fragmentId}")]
+        public async Task<IActionResult> UpdateFragment(int fragmentId, [FromBody] FragmentsModel fragment)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized("Invalid token");
+
+            if (fragmentId <= 0)
+                return BadRequest("Invalid fragment id");
+
+            if (string.IsNullOrWhiteSpace(fragment.Content))
+                return BadRequest("Content is required");
+
+            try
+            {
+                var success = await _fragService.UpdateFragment(
+                    fragmentId,
+                    fragment.Content,
+                    int.Parse(userId)
+                );
+
+                return success ? Ok() : NotFound();
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{fragmentId}")]
-        public async Task<IActionResult> DeleteFragments(int fragmentId)
+        public async Task<IActionResult> DeleteFragment(int fragmentId)
         {
-
             if (fragmentId <= 0)
                 return BadRequest("Invalid fragment");
 
-            int rowFragment;
-
             try
             {
-                rowFragment = await _fragService.DeleteFragments(fragmentId);
+                var success = await _fragService.DeleteFragment(fragmentId);
+
+                return success ? Ok() : NotFound();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
-            return Ok(fragmentId);
         }
     }
 }

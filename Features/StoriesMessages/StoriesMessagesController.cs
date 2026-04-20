@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WriteTogether.Features.StoriesMessages
 {
@@ -27,8 +28,15 @@ namespace WriteTogether.Features.StoriesMessages
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] StoriesMessagesModel message)
         {
-            if (message == null || message.StoryId <= 0 || message.UserId <= 0)
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized("Invalid token");
+
+            if (message == null || message.StoryId <= 0 || string.IsNullOrWhiteSpace(message.Message))
                 return BadRequest("Invalid data");
+
+            message.UserId = int.Parse(userId);
 
             var id = await _service.Create(message);
 
@@ -38,7 +46,12 @@ namespace WriteTogether.Features.StoriesMessages
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] StoriesMessagesModel message)
         {
-            if (id <= 0 || message == null)
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized("Invalid token");
+
+            if (id <= 0 || message == null || string.IsNullOrWhiteSpace(message.Message))
                 return BadRequest("Invalid data");
 
             message.MessageId = id;
@@ -54,6 +67,11 @@ namespace WriteTogether.Features.StoriesMessages
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized("Invalid token");
+
             if (id <= 0)
                 return BadRequest("Invalid id");
 

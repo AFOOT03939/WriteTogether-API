@@ -11,5 +11,7 @@
         public string? Message { get; set; }
 
         public string? ImageUrl { get; set; }
+        public string? UserName { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }
