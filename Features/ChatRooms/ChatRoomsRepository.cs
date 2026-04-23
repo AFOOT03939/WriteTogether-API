@@ -40,7 +40,7 @@ namespace WriteTogether.Features.ChatRooms
                 INSERT INTO chat_rooms (story_id)
                 VALUES (@StoryId);
         
-                SELECT LAST_INSERT_ID();
+                RETURNING id;
             ";
 
             var id = await connection.ExecuteScalarAsync<int>(sql, new

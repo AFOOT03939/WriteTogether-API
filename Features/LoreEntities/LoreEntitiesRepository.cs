@@ -45,7 +45,7 @@ namespace WriteTogether.Features.LoreEntities
                 VALUES
                     (@StoryId, @Name, @Type, @Description, @Importance, @FirstFragmentId);
 
-                SELECT LAST_INSERT_ID();
+                RETURNING id;
             ";
 
             return await connection.ExecuteScalarAsync<int>(sql, model);

@@ -72,3 +72,4 @@ E:\Users\victo\source\repos\WriteTogether\WriteTogether\obj\Debug\net10.0\ref\Wr
 E:\Users\victo\source\repos\WriteTogether\WriteTogether\obj\Debug\net10.0\WriteTogether.sourcelink.json
 E:\Users\victo\source\repos\WriteTogether\WriteTogether\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 E:\Users\victo\source\repos\WriteTogether\WriteTogether\bin\Debug\net10.0\WriteTogether.staticwebassets.runtime.json
+E:\Users\victo\source\repos\WriteTogether\WriteTogether\bin\Debug\net10.0\Npgsql.dll

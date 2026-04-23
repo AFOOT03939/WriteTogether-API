@@ -43,22 +43,16 @@ namespace WriteTogether.Features.StoriesAll
             using var connection = _connection.CreateConnection();
 
             var sql = @"
-                BEGIN TRAN;
-
-                DECLARE @NextVersion INT;
-
-                SELECT @NextVersion = ISNULL(MAX(version), 0) + 1
-                FROM story_summaries WITH (UPDLOCK, HOLDLOCK)
-                WHERE story_id = @StoryId;
-
-                INSERT INTO story_summaries 
-                    (story_id, summary_text, generated_at, version)
-                OUTPUT INSERTED.id
-                VALUES 
-                    (@StoryId, @SummaryText, @CreatedAt, @NextVersion);
-
-                COMMIT;
-                ";
+                INSERT INTO story_summaries (story_id, summary_text, generated_at, version)
+                SELECT 
+                    @StoryId,
+                    @SummaryText,
+                    @CreatedAt,
+                    COALESCE(MAX(version), 0) + 1
+                FROM story_summaries
+                WHERE story_id = @StoryId
+                RETURNING id;
+            ";
 
             var parameters = new
             {

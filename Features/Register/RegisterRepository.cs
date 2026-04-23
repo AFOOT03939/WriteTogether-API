@@ -16,8 +16,8 @@ namespace WriteTogether.Features.Register
 
             var sql = @"
                 INSERT INTO users (username, email, password, role, status, created_at, created_by)
-                OUTPUT INSERTED.id
-                VALUES (@UserName, @Email, @Password, @Role, @Status, @CreatedAt, @CreatedBy);
+                VALUES (@UserName, @Email, @Password, @Role, @Status, @CreatedAt, @CreatedBy)
+                RETURNING id;
                 ";
 
             var parameters = new
@@ -26,7 +26,7 @@ namespace WriteTogether.Features.Register
                 register.Email,
                 register.Password,
                 Role = "user",
-                Status = 1,
+                Status = true,
                 CreatedAt = DateTime.UtcNow,
                 CreatedBy = "system"
             };

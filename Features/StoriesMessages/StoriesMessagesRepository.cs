@@ -38,8 +38,8 @@ namespace WriteTogether.Features.StoriesMessages
 
             var sql = @"
                 INSERT INTO story_messages (story_id, user_id, message, image_url, created_at, created_by)
-                OUTPUT INSERTED.id
-                VALUES (@StoryId, @UserId, @Message, @ImageUrl, @CreatedAt, @CreatedBy);
+                VALUES (@StoryId, @UserId, @Message, @ImageUrl, @CreatedAt, @CreatedBy)
+                RETURNING id;
             ";
 
             return await connection.ExecuteScalarAsync<int>(sql, new

@@ -62,7 +62,7 @@ namespace WriteTogether.Features.ChatMessages
                 INSERT INTO chat_messages (room_id, user_id, message, image_url)
                 VALUES (@RoomId, @UserId, @Message, @ImageUrl);
 
-                SELECT LAST_INSERT_ID();
+                RETURNING id;
             ";
 
             var id = await connection.ExecuteScalarAsync<int>(sql, model);

@@ -54,25 +54,12 @@ namespace WriteTogether.Features.Ratings
 
             //UPSERT, si existe un rating, hace update, de lo contrario, inserta
             var sql = @"
-                IF EXISTS (
-                    SELECT 1 FROM ratings 
-                    WHERE story_id = @StoryId AND user_id = @UserId
-                )
-                BEGIN
-                    UPDATE ratings
-                    SET rating_value = @Rating
-                    WHERE story_id = @StoryId AND user_id = @UserId;
-
-                    SELECT id FROM ratings 
-                    WHERE story_id = @StoryId AND user_id = @UserId;
-                END
-                ELSE
-                BEGIN
-                    INSERT INTO ratings (story_id, user_id, rating_value, created_at, created_by)
-                    OUTPUT INSERTED.id
-                    VALUES (@StoryId, @UserId, @Rating, @CreatedAt, @CreatedBy);
-                END
-                ";
+                INSERT INTO ratings (story_id, user_id, rating_value, created_at, created_by)
+                VALUES (@StoryId, @UserId, @Rating, @CreatedAt, @CreatedBy)
+                ON CONFLICT (story_id, user_id)
+                DO UPDATE SET rating_value = EXCLUDED.rating_value
+                RETURNING id;
+            ";
 
             var parameters = new
             {

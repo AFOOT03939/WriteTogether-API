@@ -57,8 +57,8 @@ namespace WriteTogether.Features.Tags
 
             var sql = @"
                 INSERT INTO tags (name, created_at, created_by)
-                OUTPUT INSERTED.id
-                VALUES (@Name, @CreatedAt,@CreatedBy);
+                VALUES (@Name, @CreatedAt,@CreatedBy)
+                RETURNING id;
             ";
 
             var parameters = new

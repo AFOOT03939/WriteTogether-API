@@ -102,7 +102,7 @@ namespace WriteTogether.Features.Stories
                         s.visibility AS Visibility,
                         u.username AS AuthorName,
                         STRING_AGG(c.name, ', ') AS Categories,
-                        STRING_AGG(CAST(c.id AS VARCHAR), ',') AS CategoryIds
+                        STRING_AGG(CAST(c.id AS TEXT), ',') AS CategoryIds,
                         FLOOR(AVG(r.rating_value)) AS Rating
                     FROM stories s
                     INNER JOIN users u 
@@ -161,8 +161,7 @@ namespace WriteTogether.Features.Stories
                 TagId = tagId
             };
 
-            var result = await connection.ExecuteScalarAsync<int>(sql, parameters);
-
+            var result = await connection.ExecuteAsync(sql, parameters);
             return result > 0;
 
         }
@@ -243,7 +242,7 @@ namespace WriteTogether.Features.Stories
                         s.created_at AS CreatedAt,
                         u.username AS AuthorName,
                         STRING_AGG(c.name, ', ') AS Categories,
-                        STRING_AGG(CAST(c.id AS VARCHAR), ',') AS CategoryIds,
+                        STRING_AGG(CAST(c.id AS TEXT), ',') AS CategoryIds,
                         FLOOR(AVG(r.rating_value)) AS Rating
                     FROM stories s
                     INNER JOIN users u 
@@ -294,7 +293,7 @@ namespace WriteTogether.Features.Stories
                         s.created_at AS CreatedAt,
                         u.username AS AuthorName,
                         STRING_AGG(c.name, ', ') AS Categories,
-                        STRING_AGG(CAST(c.id AS VARCHAR), ',') AS CategoryIds
+                        STRING_AGG(CAST(c.id AS TEXT), ',') AS CategoryIds,
                         FLOOR(AVG(r.rating_value)) AS Rating
                     FROM stories s
                     INNER JOIN users u 
@@ -367,9 +366,9 @@ namespace WriteTogether.Features.Stories
                     @Status,
                     @Visibility,
                     @ImageUrl,
-                    GETDATE()
+                    NOW()
                 )
-                SELECT CAST(SCOPE_IDENTITY() as int);
+                RETURNING id;
             ";
 
             var storyId = await connection.ExecuteScalarAsync<int>(sql, new

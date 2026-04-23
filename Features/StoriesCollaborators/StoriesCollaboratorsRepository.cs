@@ -19,7 +19,7 @@ namespace WriteTogether.Features.Stories
 
             var sql = @"
                 INSERT INTO story_collaborators (story_id, user_id, created_at)
-                VALUES (@StoryId, @UserId, SYSDATETIME());
+                VALUES (@StoryId, @UserId, NOW());
             ";
 
             return await connection.ExecuteAsync(sql, new

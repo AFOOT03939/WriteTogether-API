@@ -74,12 +74,11 @@ namespace WriteTogether.Features.Fragments
         {
             using var connection = _connection.CreateConnection();
 
-            // 🔥 calcular orden
             var orderSql = @"
-        SELECT ISNULL(MAX(order_index), 0) + 1
-        FROM fragments
-        WHERE story_id = @StoryId;
-    ";
+                SELECT COALESCE(MAX(order_index), 0) + 1
+                FROM fragments
+                WHERE story_id = @StoryId;
+            ";
 
             var orderIndex = await connection.ExecuteScalarAsync<int>(orderSql, new
             {
@@ -96,7 +95,6 @@ namespace WriteTogether.Features.Fragments
                     created_at,
                     created_by
                 )
-                OUTPUT INSERTED.id
                 VALUES (
                     @StoryId,
                     @UserId,
@@ -105,7 +103,8 @@ namespace WriteTogether.Features.Fragments
                     @ImageUrl,
                     @CreatedAt,
                     @CreatedBy
-                );
+                )
+                RETURNING id;
             ";
 
             var parameters = new
@@ -130,7 +129,7 @@ namespace WriteTogether.Features.Fragments
                 UPDATE fragments
                 SET 
                     content = @Content,
-                    updated_at = SYSDATETIME()
+                    updated_at = NOW()
                 WHERE id = @FragmentId;
             ";
 
