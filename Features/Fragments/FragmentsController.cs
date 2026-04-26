@@ -133,5 +133,23 @@ namespace WriteTogether.Features.Fragments
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("{fragmentId}/image")]
+        public async Task<IActionResult> UploadFragmentImage(int fragmentId, IFormFile file)
+        {
+            if (fragmentId <= 0)
+                return BadRequest("Invalid fragment");
+
+            try
+            {
+                var imageUrl = await _fragService.UploadFragmentImage(fragmentId, file);
+
+                return Ok(new { imageUrl });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

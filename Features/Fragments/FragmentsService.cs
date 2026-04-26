@@ -1,13 +1,16 @@
 ﻿using WriteTogether.Features.Ratings;
+using WriteTogether.Helpers.Cloudinary;
 
 namespace WriteTogether.Features.Fragments
 {
     public class FragmentsService
     {
         private readonly FragmentsRepository _repo;
-        public FragmentsService(FragmentsRepository repo)
+        private readonly IImageService _imageService; 
+        public FragmentsService(FragmentsRepository repo, IImageService imageService)
         {
             _repo = repo;
+            _imageService = imageService;
         }
 
         public async Task<IEnumerable<FragmentsModel>> GetFragmentsByUser(int userId)
@@ -62,5 +65,16 @@ namespace WriteTogether.Features.Fragments
 
             return result > 0;
         }
+
+        public async Task<string> UploadFragmentImage(int fragmentId, IFormFile file)
+        {
+
+            var imageUrl = await _imageService.UploadImageAsync(file);
+
+            await _repo.UpdateFragmentImage(fragmentId, imageUrl);
+
+            return imageUrl;
+        }
     }
 }
+

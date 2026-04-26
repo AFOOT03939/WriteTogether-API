@@ -156,6 +156,21 @@ namespace WriteTogether.Features.Fragments
 
             return result;
         }
+        public async Task<int> UpdateFragmentImage(int fragmentId, string imageUrl)
+        {
+            using var connection = _connection.CreateConnection();
 
+            var sql = @"
+                    UPDATE fragments
+                    SET image_url = @ImageUrl
+                    WHERE id = @FragmentId;
+                ";
+
+            return await connection.ExecuteAsync(sql, new
+            {
+                FragmentId = fragmentId,
+                ImageUrl = imageUrl
+            });
+        }
     }
 }

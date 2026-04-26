@@ -86,5 +86,22 @@ namespace WriteTogether.Features.StoriesMessages
 
             return await connection.ExecuteAsync(sql, new { MessageId = messageId });
         }
+
+        public async Task<int> UpdateMessageImage(int messageId, string imageUrl)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                    UPDATE story_messages
+                    SET image_url = @ImageUrl
+                    WHERE id = @MessageId;
+                ";
+
+            return await connection.ExecuteAsync(sql, new
+            {
+                MessageId = messageId,
+                ImageUrl = imageUrl
+            });
+        }
     }
 }

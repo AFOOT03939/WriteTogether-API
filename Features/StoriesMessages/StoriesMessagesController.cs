@@ -33,9 +33,6 @@ namespace WriteTogether.Features.StoriesMessages
             if (userId == null)
                 return Unauthorized("Invalid token");
 
-            if (message == null || message.StoryId <= 0 || string.IsNullOrWhiteSpace(message.Message))
-                return BadRequest("Invalid data");
-
             message.UserId = int.Parse(userId);
 
             var id = await _service.Create(message);
@@ -81,6 +78,24 @@ namespace WriteTogether.Features.StoriesMessages
                 return NotFound();
 
             return NoContent();
+        }
+
+        [HttpPost("{messageId}/image")]
+        public async Task<IActionResult> UploadStoryImage(int messageId, IFormFile file)
+        {
+            if (messageId <= 0)
+                return BadRequest("Invalid story");
+
+            try
+            {
+                var imageUrl = await _service.UploadMessageImage(messageId, file);
+
+                return Ok(new { imageUrl });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
