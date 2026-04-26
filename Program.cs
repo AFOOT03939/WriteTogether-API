@@ -1,3 +1,4 @@
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -15,6 +16,7 @@ using WriteTogether.Features.StoriesCollaborators;
 using WriteTogether.Features.StoriesMessages;
 using WriteTogether.Features.Tags;
 using WriteTogether.Features.Users;
+using WriteTogether.Helpers.Cloudinary;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,7 +87,15 @@ builder.Services.AddScoped<ChatMessageRepository>();
 builder.Services.AddScoped<StoriesCollaboratorsService>();
 builder.Services.AddScoped<StoriesCollaboratorsRepository>();
 
-builder.Services.AddScoped<DbConnection>(); 
+builder.Services.AddScoped<DbConnection>();
+
+builder.Services.AddSingleton(new Cloudinary(new Account(
+    "ddvabh0dq",
+    "965192327578266",
+    "gHpYKnN3HRSQQn22LMhPVFNKTXQ"
+)));
+
+builder.Services.AddScoped<IImageService, ImageService>();
 
 var app = builder.Build();
 

@@ -1,18 +1,21 @@
 ﻿using WriteTogether.Features.Ratings;
 using WriteTogether.Features.Tags;
+using WriteTogether.Helpers.Cloudinary;
 
 namespace WriteTogether.Features.Stories
 {
     public class StoriesService
     {
         private readonly StoriesRepository _repo;
+        private readonly IImageService _imageService;
         private readonly TagsRepository _tagsrepo;
         private readonly StoriesCollaboratorsRepository _collabRepo;
-        public StoriesService(StoriesRepository repo, TagsRepository tagsrepo, StoriesCollaboratorsRepository collabRepo)
+        public StoriesService(StoriesRepository repo, TagsRepository tagsrepo, StoriesCollaboratorsRepository collabRepo, IImageService imageService)
         {
             _repo = repo;
             _tagsrepo = tagsrepo;
             _collabRepo = collabRepo;
+            _imageService = imageService;
         }
 
         public async Task<IEnumerable<StoriesModel>> GetAllStories()
@@ -124,6 +127,20 @@ namespace WriteTogether.Features.Stories
             var result = await _repo.UpdateStory(updatedStory);
 
             return result > 0;
+        }
+
+        public async Task<string> UploadStoryImage(int storyId, IFormFile file)
+        {
+            var story = await _repo.GetStoryById(storyId);
+
+            if (story == null)
+                throw new Exception("Story not found");
+
+            var imageUrl = await _imageService.UploadImageAsync(file);
+
+            await _repo.UpdateStoryImage(storyId, imageUrl);
+
+            return imageUrl;
         }
     }
 }
