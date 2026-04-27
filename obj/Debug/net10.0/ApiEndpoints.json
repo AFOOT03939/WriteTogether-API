@@ -1,5 +1,37 @@
 [
   {
+    "ContainingType": "WriteTogether.Features.AiText.AiTextController",
+    "Method": "Generate",
+    "RelativePath": "api/ai-text/generate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "WriteTogether.Features.AiText.AiTextRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.AiImages.AiImagesController",
+    "Method": "GenerateImage",
+    "RelativePath": "api/ai/generate-image",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "WriteTogether.Features.AiImages.AiImagesModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WriteTogether.Features.Authorization.AuthorizationController",
     "Method": "Login",
     "RelativePath": "api/auth/login",
@@ -656,6 +688,27 @@
         "Name": "categoryId",
         "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Stories.StoriesController",
+    "Method": "UpdateStoryStatus",
+    "RelativePath": "api/stories/status/{storyId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

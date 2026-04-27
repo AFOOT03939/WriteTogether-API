@@ -412,6 +412,25 @@ namespace WriteTogether.Features.Stories
             return result;
         }
 
+        public async Task<int> UpdateStoryStatus(int storyId, string status)
+        {
+            using var connection = _connection.CreateConnection();
+
+            var sql = @"
+                UPDATE stories
+                SET status = @Status
+                WHERE id = @StoryId;
+            ";
+
+            var result = await connection.ExecuteAsync(sql, new
+            {
+                Status = status,
+                StoryId = storyId
+            });
+
+            return result;
+        }
+
         public async Task<int> InsertStoryCategory(int storyId, int categoryId)
         {
             using var connection = _connection.CreateConnection();

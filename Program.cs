@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WriteTogether.Dapper;
+using WriteTogether.Features.AiImages;
+using WriteTogether.Features.AiText;
 using WriteTogether.Features.Authorization;
 using WriteTogether.Features.Categories;
 using WriteTogether.Features.ChatMessages;
@@ -86,6 +88,11 @@ builder.Services.AddScoped<ChatMessageRepository>();
 
 builder.Services.AddScoped<StoriesCollaboratorsService>();
 builder.Services.AddScoped<StoriesCollaboratorsRepository>();
+
+builder.Services.AddHttpClient<AiImagesService>();
+builder.Services.AddScoped<AiImagesRepository>();
+
+builder.Services.AddHttpClient<AiTextService>();
 
 builder.Services.AddScoped<DbConnection>();
 

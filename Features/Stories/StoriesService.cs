@@ -129,6 +129,27 @@ namespace WriteTogether.Features.Stories
             return result > 0;
         }
 
+        public async Task<bool> UpdateStoryStatus(int storyId, string status, int currentUserId)
+        {
+            var existingStory = await _repo.GetStoryById(storyId);
+
+            if (existingStory == null)
+                throw new Exception("Story not found");
+
+            // Si no es owner, verificar si es colaborador
+            if (existingStory.UserId != currentUserId)
+            {
+                var isCollaborator = await _collabRepo.IsCollaborator(storyId, currentUserId);
+
+                if (!isCollaborator)
+                    throw new UnauthorizedAccessException("You don't have permission to edit this story");
+            }
+
+            var result = await _repo.UpdateStoryStatus(storyId, status);
+
+            return result > 0;
+        }
+
         public async Task<string> UploadStoryImage(int storyId, IFormFile file)
         {
             var story = await _repo.GetStoryById(storyId);

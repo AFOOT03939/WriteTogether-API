@@ -229,5 +229,32 @@ namespace WriteTogether.Features.Stories
             }
         }
 
+        [HttpPut("status/{storyId}")]
+        public async Task<IActionResult> UpdateStoryStatus(int storyId, [FromBody] string status)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized("Invalid token");
+
+            try
+            {
+                var success = await _stService.UpdateStoryStatus(storyId, status, int.Parse(userId));
+
+                if (!success)
+                    return NotFound();
+
+                return NoContent();
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
