@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WriteTogether.Features.Categories;
 using WriteTogether.Features.Ratings;
 
@@ -72,6 +73,15 @@ namespace WriteTogether.Features.Ratings
             }
 
             int userId;
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            rating.UserId = int.Parse(userIdClaim.Value);
 
             try
             {

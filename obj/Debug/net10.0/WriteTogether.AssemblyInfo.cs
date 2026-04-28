@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WriteTogether")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ba4396d4fad9345579dccfad7a8179f89ab88e2d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+67819b1ddb4ad2784723a3f6eb5f384b02a01099")]
 [assembly: System.Reflection.AssemblyProductAttribute("WriteTogether")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WriteTogether")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
