@@ -16,6 +16,27 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WriteTogether.Features.AiText.AiTextController",
+    "Method": "GenerateFullStory",
+    "RelativePath": "api/ai-text/generate-full/{storyId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "WriteTogether.Features.AiText.AiTextRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WriteTogether.Features.AiImages.AiImagesController",
     "Method": "GenerateImage",
     "RelativePath": "api/ai/generate-image",

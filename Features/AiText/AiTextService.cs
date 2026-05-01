@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 using WriteTogether.Features.Fragments;
+using WriteTogether.Features.StoriesAll;
 
 namespace WriteTogether.Features.AiText
 {
@@ -9,15 +10,18 @@ namespace WriteTogether.Features.AiText
         private readonly HttpClient _http;
         private readonly IConfiguration _config;
         private readonly FragmentsService _fragmentsService;
+        private readonly StoriesAllService _storiesAllService;
 
         public AiTextService(
-            HttpClient http,
-            IConfiguration config,
-            FragmentsService fragmentsService)
+        HttpClient http,
+        IConfiguration config,
+        FragmentsService fragmentsService,
+        StoriesAllService storiesAllService)
         {
             _http = http;
             _config = config;
             _fragmentsService = fragmentsService;
+            _storiesAllService = storiesAllService;
         }
 
         public async Task<string> GenerateAndUpdate(
@@ -44,7 +48,7 @@ namespace WriteTogether.Features.AiText
             var json = JsonSerializer.Serialize(requestBody);
 
             var response = await _http.PostAsync(
-                $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={apiKey}",
+                $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key={apiKey}",
                 new StringContent(json, Encoding.UTF8, "application/json")
             );
 
@@ -65,6 +69,61 @@ namespace WriteTogether.Features.AiText
                 fragmentId,
                 generatedText!,
                 userId
+            );
+
+            return generatedText!;
+        }
+
+        public async Task<string> GenerateFullStoryAndSave(
+        int storyId,
+        string prompt,
+        int userId)
+        {
+            var apiKey = _config["Gemini:ApiKey"];
+
+            var requestBody = new
+            {
+                contents = new[]
+                {
+            new
+            {
+                parts = new[]
+                {
+                    new { text = prompt }
+                }
+            }
+        }
+            };
+
+            var json = JsonSerializer.Serialize(requestBody);
+
+            var response = await _http.PostAsync(
+                $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key={apiKey}",
+                new StringContent(json, Encoding.UTF8, "application/json")
+            );
+
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            using var doc = JsonDocument.Parse(content);
+
+            var generatedText = doc.RootElement
+                .GetProperty("candidates")[0]
+                .GetProperty("content")
+                .GetProperty("parts")[0]
+                .GetProperty("text")
+                .GetString();
+
+            if (string.IsNullOrWhiteSpace(generatedText))
+                throw new Exception("AI returned empty text");
+
+            await _storiesAllService.CreateFullStoryByStory(
+                storyId,
+                new StoriesAllModelDto
+                {
+                    SummaryText = generatedText
+                }
             );
 
             return generatedText!;

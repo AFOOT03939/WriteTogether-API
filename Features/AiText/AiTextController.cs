@@ -40,5 +40,37 @@ namespace WriteTogether.Features.AiText
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("generate-full/{storyId}")]
+        public async Task<IActionResult> GenerateFullStory(
+        int storyId,
+        [FromBody] AiTextRequest request)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+                return Unauthorized();
+
+            if (string.IsNullOrWhiteSpace(request.Prompt))
+                return BadRequest("Prompt is required");
+
+            if (storyId <= 0)
+                return BadRequest("Invalid story");
+
+            try
+            {
+                var result = await _service.GenerateFullStoryAndSave(
+                    storyId,
+                    request.Prompt,
+                    int.Parse(userId)
+                );
+
+                return Ok(new { content = result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

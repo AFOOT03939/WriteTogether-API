@@ -104,6 +104,17 @@ builder.Services.AddSingleton(new Cloudinary(new Account(
 
 builder.Services.AddScoped<IImageService, ImageService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Pipeline
@@ -114,7 +125,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
