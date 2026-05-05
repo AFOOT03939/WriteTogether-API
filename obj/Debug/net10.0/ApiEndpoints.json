@@ -418,6 +418,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WriteTogether.Features.LoreEntities.LoreEntitiesController",
+    "Method": "GetFullWiki",
+    "RelativePath": "api/loreentities/story/{storyId}/full-wiki",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WriteTogether.Features.Ratings.RatingsController",
     "Method": "CreateRatingByStory",
     "RelativePath": "api/ratings",

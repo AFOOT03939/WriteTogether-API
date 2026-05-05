@@ -10,6 +10,7 @@ using WriteTogether.Features.Categories;
 using WriteTogether.Features.ChatMessages;
 using WriteTogether.Features.ChatRooms;
 using WriteTogether.Features.Fragments;
+using WriteTogether.Features.LoreEntities;
 using WriteTogether.Features.Ratings;
 using WriteTogether.Features.Register;
 using WriteTogether.Features.Stories;
@@ -102,6 +103,10 @@ builder.Services.AddScoped<StoriesCollaboratorsRepository>();
 
 builder.Services.AddHttpClient<AiImagesService>();
 builder.Services.AddScoped<AiImagesRepository>();
+
+
+builder.Services.AddScoped<LoreEntitiesService>();
+builder.Services.AddScoped<LoreEntitiesRepository>();
 
 builder.Services.AddHttpClient<AiTextService>();
 

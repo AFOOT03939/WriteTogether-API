@@ -62,5 +62,15 @@ namespace WriteTogether.Features.LoreEntities
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("story/{storyId}/full-wiki")]
+        public async Task<IActionResult> GetFullWiki(int storyId)
+        {
+            // El prompt de "Wikipedia" lo definimos aquí o lo recibimos del front
+            string defaultPrompt = "Genera una síntesis enciclopédica, formal y objetiva de la siguiente historia, similar a una introducción de Wikipedia:";
+
+            var result = await _leService.GetFullWikiData(storyId, defaultPrompt);
+            return Ok(result);
+        }
     }
 }

@@ -10,4 +10,9 @@
         public int? Importance { get; set; }
         public int? FirstFragmentId { get; set; }
     }
+    public class LoreWikiResponse
+    {
+        public string StorySummary { get; set; } = string.Empty;
+        public IEnumerable<LoreEntitiesModel> Entities { get; set; } = new List<LoreEntitiesModel>();
+    }
 }
