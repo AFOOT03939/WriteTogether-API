@@ -1,4 +1,5 @@
-﻿using WriteTogether.Features.AiText;
+﻿using System.Text.Json;
+using WriteTogether.Features.AiText;
 using WriteTogether.Features.StoriesAll;
 
 namespace WriteTogether.Features.LoreEntities
@@ -45,27 +46,35 @@ namespace WriteTogether.Features.LoreEntities
             return await _repo.Delete(id);
         }
 
+        // LoreEntitiesService.cs
         public async Task<LoreWikiResponse> GetFullWikiData(int storyId, string userPrompt)
         {
-            // Obtener personajes
-            var entities = await _repo.GetByStory(storyId);
-
-            // Obtener historia completa 
             var storySegments = await _storiesAllService.GetFullStoriesByStory(storyId);
-
-            // Corregimos el error del screenshot: 
-            // Si tu modelo tiene SummaryText, usamos esa. 
-            // Si lo que quieres es unir todos los fragmentos, asegúrate de estar llamando al servicio correcto.
             string fullContent = string.Join("\n\n", storySegments.Select(s => s.SummaryText));
 
-            // Generar síntesis usando el nuevo método genérico
-            string aiContext = $"{userPrompt}\n\nCONTENIDO DE LA HISTORIA:\n{fullContent}";
-            string summary = await _aiService.GenerateRawText(aiContext);
+            // Cambiamos "summary" por "StorySummary" en el prompt para que coincida con tu clase C#
+            string masterPrompt = $@"Analiza la siguiente historia y genera:
+    1. Un resumen formal.
+    2. Una lista de entidades.
+    Responde ESTRICTAMENTE en este formato JSON:
+    {{
+      ""StorySummary"": ""texto del resumen"",
+      ""Entities"": [
+        {{ ""Name"": ""Nombre"", ""Description"": ""Lore"", ""type"": ""character | place | event"" }}
+      ]
+    }}
+    Historia: {fullContent}";
+
+            string rawJson = await _aiService.GenerateRawText(masterPrompt);
+            rawJson = rawJson.Replace("```json", "").Replace("```", "").Trim();
+
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var wikiResult = JsonSerializer.Deserialize<LoreWikiResponse>(rawJson, options);
 
             return new LoreWikiResponse
             {
-                StorySummary = summary,
-                Entities = entities
+                StorySummary = wikiResult?.StorySummary ?? "No summary generated.",
+                Entities = wikiResult?.Entities ?? new List<LoreEntitiesModel>()
             };
         }
     }

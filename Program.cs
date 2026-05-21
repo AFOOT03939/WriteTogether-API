@@ -5,8 +5,13 @@ using System.Text;
 using WriteTogether.Dapper;
 using WriteTogether.Features.AiImages;
 using WriteTogether.Features.AiText;
+using WriteTogether.Features.Audio;
 using WriteTogether.Features.Authorization;
 using WriteTogether.Features.Categories;
+using WriteTogether.Features.Challenges;
+using WriteTogether.Features.Challenges.WriteTogether.Features.Challenges;
+using WriteTogether.Features.ChallengesProgress;
+using WriteTogether.Features.ChallengesProgress.WriteTogether.Features.ChallengesProgress;
 using WriteTogether.Features.ChatMessages;
 using WriteTogether.Features.ChatRooms;
 using WriteTogether.Features.Fragments;
@@ -101,12 +106,23 @@ builder.Services.AddScoped<ChatMessageRepository>();
 builder.Services.AddScoped<StoriesCollaboratorsService>();
 builder.Services.AddScoped<StoriesCollaboratorsRepository>();
 
-builder.Services.AddHttpClient<AiImagesService>();
-builder.Services.AddScoped<AiImagesRepository>();
+builder.Services.AddScoped<StoriesCollaboratorsService>();
+builder.Services.AddScoped<StoriesCollaboratorsRepository>();
 
+builder.Services.AddScoped<ChallengesService>();
+builder.Services.AddScoped<ChallengesRepository>();
+
+builder.Services.AddScoped<ChallengeEngineService>();
+
+builder.Services.AddScoped<ChallengesProgressService>();
+builder.Services.AddScoped<ChallengesProgressRepository>();
 
 builder.Services.AddScoped<LoreEntitiesService>();
 builder.Services.AddScoped<LoreEntitiesRepository>();
+
+builder.Services.AddScoped<AudioService>();
+
+builder.Services.AddScoped<AudioHelpers>();
 
 builder.Services.AddHttpClient<AiTextService>();
 

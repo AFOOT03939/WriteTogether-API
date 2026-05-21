@@ -1,13 +1,19 @@
 ﻿using WriteTogether.Features.Categories;
+using WriteTogether.Features.Challenges;
 
 namespace WriteTogether.Features.Ratings
 {
     public class RatingsService
     {
         private readonly RatingsRepository _repo;
-        public RatingsService(RatingsRepository repo)
+        private readonly ChallengeEngineService _challengeEngine;
+        public RatingsService(
+            RatingsRepository repo,
+            ChallengeEngineService challengeEngine
+        )
         {
             _repo = repo;
+            _challengeEngine = challengeEngine;
         }
 
         public async Task<double?> GetRatingsByStory(int storiesId)
@@ -31,12 +37,25 @@ namespace WriteTogether.Features.Ratings
             return rating.Rating ?? 0;
         }
 
-        public async Task<int> CreateRatingsByAuthor(RatingsModel rating)
+        public async Task<int> CreateRatingsByAuthor(
+            RatingsModel rating
+        )
         {
-            var result = await _repo.CreateRatingsByAuthor(rating);
+            var result =
+                await _repo.CreateRatingsByAuthor(
+                    rating
+                );
 
             if (result <= 0)
                 return 0;
+
+            if (rating.UserId.HasValue)
+            {
+                await _challengeEngine.UpdateProgress(
+                    rating.UserId.Value,
+                    "ratings"
+                );
+            }
 
             return result;
         }

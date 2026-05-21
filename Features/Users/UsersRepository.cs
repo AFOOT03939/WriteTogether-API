@@ -64,5 +64,30 @@ namespace WriteTogether.Features.Users
                 ImageUrl = imageUrl
             });
         }
+
+        public async Task<int> AddReputationPoints(
+            int userId,
+            int points
+        )
+        {
+            using var connection =
+                _connection.CreateConnection();
+
+            var sql = @"
+        UPDATE users
+        SET reputation_points =
+            reputation_points + @Points
+        WHERE id = @UserId;
+    ";
+
+            return await connection.ExecuteAsync(
+                sql,
+                new
+                {
+                    UserId = userId,
+                    Points = points
+                }
+            );
+        }
     }
 }

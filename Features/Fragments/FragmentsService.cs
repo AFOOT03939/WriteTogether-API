@@ -1,4 +1,5 @@
-﻿using WriteTogether.Features.Ratings;
+﻿using WriteTogether.Features.Challenges;
+using WriteTogether.Features.Ratings;
 using WriteTogether.Helpers.Cloudinary;
 
 namespace WriteTogether.Features.Fragments
@@ -6,11 +7,18 @@ namespace WriteTogether.Features.Fragments
     public class FragmentsService
     {
         private readonly FragmentsRepository _repo;
-        private readonly IImageService _imageService; 
-        public FragmentsService(FragmentsRepository repo, IImageService imageService)
+        private readonly IImageService _imageService;
+        private readonly ChallengeEngineService _challengeEngine;
+
+        public FragmentsService(
+            FragmentsRepository repo,
+            IImageService imageService,
+            ChallengeEngineService challengeEngine
+        )
         {
             _repo = repo;
             _imageService = imageService;
+            _challengeEngine = challengeEngine;
         }
 
         public async Task<IEnumerable<FragmentsModel>> GetFragmentsByUser(int userId)
@@ -27,18 +35,37 @@ namespace WriteTogether.Features.Fragments
             return result;
         }
 
-        public async Task<int> CreateFragment(FragmentsModel fragment)
+        public async Task<int> CreateFragment(
+            FragmentsModel fragment
+        )
         {
             if (fragment == null)
-                throw new ArgumentNullException(nameof(fragment));
+                throw new ArgumentNullException(
+                    nameof(fragment)
+                );
 
-            if (string.IsNullOrWhiteSpace(fragment.Content))
-                throw new Exception("Content cannot be empty");
+            if (string.IsNullOrWhiteSpace(
+                fragment.Content
+            ))
+                throw new Exception(
+                    "Content cannot be empty"
+                );
 
-            var result = await _repo.CreateFragment(fragment);
+            var result =
+                await _repo.CreateFragment(fragment);
 
             if (result <= 0)
-                throw new Exception("Error creating fragment");
+                throw new Exception(
+                    "Error creating fragment"
+                );
+
+            if (fragment.UserId.HasValue)
+            {
+                await _challengeEngine.UpdateProgress(
+                    fragment.UserId.Value,
+                    "stories"
+                );
+            }
 
             return result;
         }

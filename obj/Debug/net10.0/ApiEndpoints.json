@@ -53,6 +53,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WriteTogether.Features.Audio.AudioController",
+    "Method": "GenerateAudio",
+    "RelativePath": "api/audio/{storyId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "storyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WriteTogether.Features.Authorization.AuthorizationController",
     "Method": "Login",
     "RelativePath": "api/auth/login",
@@ -100,6 +116,164 @@
         "Name": "categoryId",
         "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Challenges.WriteTogether.Features.Challenges.ChallengesController",
+    "Method": "GetAllChallenges",
+    "RelativePath": "api/challenges",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Challenges.WriteTogether.Features.Challenges.ChallengesController",
+    "Method": "CreateChallenge",
+    "RelativePath": "api/challenges",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "challenge",
+        "Type": "WriteTogether.Features.Challenges.ChallengesModelRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChallengesProgress.ChallengesProgressController",
+    "Method": "GetMyProgress",
+    "RelativePath": "api/challenges-progress",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChallengesProgress.ChallengesProgressController",
+    "Method": "CreateProgress",
+    "RelativePath": "api/challenges-progress",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "progress",
+        "Type": "WriteTogether.Features.ChallengesProgress.WriteTogether.Features.ChallengesProgress.ChallengesProgressRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChallengesProgress.ChallengesProgressController",
+    "Method": "GetChallengeProgress",
+    "RelativePath": "api/challenges-progress/{challengeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "challengeId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChallengesProgress.ChallengesProgressController",
+    "Method": "UpdateProgress",
+    "RelativePath": "api/challenges-progress/{challengeId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "challengeId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "progress",
+        "Type": "WriteTogether.Features.ChallengesProgress.WriteTogether.Features.ChallengesProgress.ChallengesProgressRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.ChallengesProgress.ChallengesProgressController",
+    "Method": "DeleteProgress",
+    "RelativePath": "api/challenges-progress/{progressId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "progressId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Challenges.WriteTogether.Features.Challenges.ChallengesController",
+    "Method": "GetChallengeById",
+    "RelativePath": "api/challenges/{challengeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "challengeId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Challenges.WriteTogether.Features.Challenges.ChallengesController",
+    "Method": "UpdateChallenge",
+    "RelativePath": "api/challenges/{challengeId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "challengeId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "challenge",
+        "Type": "WriteTogether.Features.Challenges.ChallengesModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WriteTogether.Features.Challenges.WriteTogether.Features.Challenges.ChallengesController",
+    "Method": "DeleteChallenge",
+    "RelativePath": "api/challenges/{challengeId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "challengeId",
+        "Type": "System.Int32",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

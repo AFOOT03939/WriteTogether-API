@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "kAl8O1mu6RA=",
+  "dgSpecHash": "MBKzvNp2SiQ=",
   "success": true,
   "projectFilePath": "E:\\Users\\victo\\source\\repos\\WriteTogether\\WriteTogether\\WriteTogether.csproj",
   "expectedPackageFiles": [
@@ -30,7 +30,8 @@
     "E:\\Users\\victo\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.0.1\\system.identitymodel.tokens.jwt.8.0.1.nupkg.sha512",
     "E:\\Users\\victo\\.nuget\\packages\\system.memory.data\\8.0.1\\system.memory.data.8.0.1.nupkg.sha512",
     "E:\\Users\\victo\\.nuget\\packages\\system.security.cryptography.pkcs\\9.0.11\\system.security.cryptography.pkcs.9.0.11.nupkg.sha512",
-    "E:\\Users\\victo\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.11\\system.security.cryptography.protecteddata.9.0.11.nupkg.sha512"
+    "E:\\Users\\victo\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.11\\system.security.cryptography.protecteddata.9.0.11.nupkg.sha512",
+    "E:\\Users\\victo\\.nuget\\packages\\system.speech\\10.0.7\\system.speech.10.0.7.nupkg.sha512"
   ],
   "logs": []
 }

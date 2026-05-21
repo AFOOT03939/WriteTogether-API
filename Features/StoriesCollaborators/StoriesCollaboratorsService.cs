@@ -1,4 +1,5 @@
-﻿using WriteTogether.Features.Stories;
+﻿using WriteTogether.Features.Challenges;
+using WriteTogether.Features.Stories;
 
 namespace WriteTogether.Features.StoriesCollaborators
 {
@@ -6,13 +7,16 @@ namespace WriteTogether.Features.StoriesCollaborators
     {
         private readonly StoriesCollaboratorsRepository _collabRepo;
         private readonly StoriesRepository _storiesRepo;
+        private readonly ChallengeEngineService _challengeEngine;
 
         public StoriesCollaboratorsService(
-            StoriesCollaboratorsRepository collabRepo,
-            StoriesRepository storiesRepo)
+        StoriesCollaboratorsRepository collabRepo,
+        StoriesRepository storiesRepo,
+        ChallengeEngineService challengeEngine)
         {
             _collabRepo = collabRepo;
             _storiesRepo = storiesRepo;
+            _challengeEngine = challengeEngine;
         }
 
         public async Task<bool> JoinStory(int storyId, int currentUserId)
@@ -30,7 +34,21 @@ namespace WriteTogether.Features.StoriesCollaborators
             if (alreadyCollaborator)
                 throw new Exception("Already a collaborator");
 
-            var result = await _collabRepo.AddCollaborator(storyId, currentUserId);
+            var result =
+            await _collabRepo.AddCollaborator(
+                storyId,
+                currentUserId
+            );
+
+            if (result > 0)
+            {
+                await _challengeEngine.UpdateProgress(
+                    currentUserId,
+                    "collaborations"
+                );
+            }
+
+            return result > 0;
 
             return result > 0;
         }

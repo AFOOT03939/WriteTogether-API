@@ -1,4 +1,5 @@
-﻿using WriteTogether.Helpers.Cloudinary;
+﻿using WriteTogether.Features.Challenges;
+using WriteTogether.Helpers.Cloudinary;
 
 namespace WriteTogether.Features.StoriesMessages
 {
@@ -6,11 +7,13 @@ namespace WriteTogether.Features.StoriesMessages
     {
         private readonly StoriesMessagesRepository _repo;
         private readonly IImageService _imageService;
+        private readonly ChallengeEngineService _challengeEngine;
 
-        public StoriesMessagesService(StoriesMessagesRepository repo, IImageService imageService)
+        public StoriesMessagesService(StoriesMessagesRepository repo, IImageService imageService, ChallengeEngineService challengeEngine)
         {
             _repo = repo;
             _imageService = imageService;
+            _challengeEngine = challengeEngine;
         }
 
         public async Task<IEnumerable<StoriesMessagesModel>> GetByStory(int storyId)
@@ -18,11 +21,20 @@ namespace WriteTogether.Features.StoriesMessages
             return await _repo.GetByStory(storyId);
         }
 
-        public async Task<int> Create(StoriesMessagesModel message)
+        public async Task<int> Create(
+            StoriesMessagesModel message
+        )
         {
-            return await _repo.Create(message);
-        }
+            var messageId =
+                await _repo.Create(message);
 
+            await _challengeEngine.UpdateProgress(
+                message.UserId,
+                "comments"
+            );
+
+            return messageId;
+        }
         public async Task<bool> Update(StoriesMessagesModel message)
         {
             var result = await _repo.Update(message);
